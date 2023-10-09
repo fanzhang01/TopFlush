@@ -1,0 +1,24 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #907676;  
+    text-align: center;
+    padding: 20px 0;
+}
+
+.header-content {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.website-icon {
+    margin-right: 10px;
+}
+
+.website-title {
+    margin: 0;
+}
