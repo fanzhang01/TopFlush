@@ -19,7 +19,7 @@ const reviewSchema = new mongoose.Schema({
   },
 });
 
-restroomSchema.statics.addReview = async function (reviewData) {
+reviewSchema.statics.addReview = async function (reviewData) {
   const { reviewerId, restroomId, ratingMetrics } = reviewData;
 
   if (!reviewerId || !restroomId || !ratingMetrics) {

@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 
 const Restroom = require("./models/restrooms");
 const Review = require("./models/reviews");
+const User = require("./models/users");
 
 const app = express();
 const url = "mongodb://localhost:27017";
@@ -87,7 +88,7 @@ app.post("/createRestroom", async (req, res) => {
       accessibility,
       facility,
       text,
-      reviewerId
+      reviewerId,
     } = req.body;
 
     const restroomData = {
@@ -126,17 +127,13 @@ app.post("/createRestroom", async (req, res) => {
       },
     };
 
-    await Review.addReview(reviewData)
-
+    await Review.addReview(reviewData);
   } catch (err) {
     console.error(err);
-    res
-      .status(500)
-      .send(`
+    res.status(500).send(`
       <script>
         alert('${err.message}');
       </script>
     `);
-
   }
 });
