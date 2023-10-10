@@ -8,6 +8,8 @@ header {
   background-color: #907676;
   text-align: center;
   padding: 20px 0;
+  position: fixed;
+  width: 100%;
 }
 
 .header-content {
@@ -20,7 +22,7 @@ footer {
   background-color: #907676;
   text-align: center;
   padding: 20px 0;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   width: 100%;
 }
@@ -42,8 +44,8 @@ footer {
 }
 
 .sub-content {
-  margin: 20px;
-  padding: 20px;
+  margin: 0px;
+  padding: 160px 40px 60px;
 }
 
 .start-button {
@@ -59,7 +61,7 @@ footer {
   text-align: center;
   text-decoration: none;
   cursor: pointer;
-  width: 200px; 
+  width: 200px;
   transition: background-color 0.3s;
 }
 

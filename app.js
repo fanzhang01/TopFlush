@@ -3,6 +3,9 @@ const { MongoClient } = require("mongodb");
 const expressLayouts = require("express-ejs-layouts");
 const bodyParser = require("body-parser");
 
+const Restroom = require("./models/restrooms");
+const Review = require("./models/reviews");
+
 const app = express();
 const url = "mongodb://localhost:27017";
 const dbName = "TopFlush";
@@ -30,7 +33,9 @@ MongoClient.connect(url)
         console.error("Error ensuring collection/index:", err);
       });
     app.listen(3000, () => {
-      console.log("Server running on http://localhost:3000. Use Control + C to exit");
+      console.log(
+        "Server running on http://localhost:3000. Use Control + C to exit"
+      );
     });
   })
   .catch((err) => {
@@ -41,7 +46,7 @@ app.use((req, res, next) => {
   const titles = {
     "/": "TopFlush",
     "/home": "Home Page",
-    "/createRestroom": "Create Restroom"
+    "/createRestroom": "Create Restroom",
     // ... other paths
   };
   res.locals.title = titles[req.path] || "TopFlush";
@@ -52,7 +57,7 @@ app.get("/", async (req, res) => {
   try {
     const collection = db.collection("restrooms");
     const data = await collection.find({}).toArray();
-    res.render("index", { data }); 
+    res.render("index", { data });
   } catch (err) {
     console.error(err);
     res.send("Error");
@@ -70,7 +75,9 @@ app.get("/createRestroom", (req, res) => {
 app.post("/createRestroom", async (req, res) => {
   try {
     const {
-      location,
+      address,
+      city,
+      state,
       capacity,
       hasBabyChangingTable,
       providesSanitaryProducts,
@@ -81,9 +88,13 @@ app.post("/createRestroom", async (req, res) => {
       facility,
       text,
     } = req.body;
-    
+
     const restroomData = {
-      location,
+      location: {
+        address,
+        city,
+        state,
+      },
       capacity,
       metrics: {
         hasBabyChangingTable,
@@ -94,7 +105,7 @@ app.post("/createRestroom", async (req, res) => {
     };
 
     const result1 = await insertRestroom(restroomData);
-    const restroomId = await restroomSchema.statics.getRestroomByLocation(location);
+    const restroomId = await Restroom.getRestroomByLocation(location);
     const reviewData = {
       restroomId,
       text,
@@ -117,10 +128,11 @@ app.post("/createRestroom", async (req, res) => {
     } else {
       res.status(400).json({ error: "Failed to create restroom or review." });
     }
-
   } catch (err) {
     console.error(err);
-    res.status(500).send({ error: 'Error creating restroom', details: err.message });
+    res
+      .status(500)
+      .send({ error: "Error creating restroom", details: err.message });
   }
 });
 

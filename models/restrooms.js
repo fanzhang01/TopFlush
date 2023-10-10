@@ -1,17 +1,48 @@
 const mongoose = require("mongoose");
 
 const restroomSchema = new mongoose.Schema({
-  location: String,
-  capacity: Number,
-  reviews: [mongoose.Schema.Types.ObjectId],
-  rating: Number,
-  pathToImage: String,
+  location: {
+    address: String,
+    city: String,
+    state: String,
+  },
+  capacity: {
+    type: Number,
+    default: null,
+  },
+  reviews: {
+    type: [mongoose.Schema.Types.ObjectId],
+    default: [],
+  },
+  rating: {
+    type: Number,
+    default: null,
+  },
+  pathToImage: {
+    type: String,
+    default: null,
+  },
   metrics: {
-    isOpen: Boolean,
-    hasBabyChangingTable: Boolean,
-    providesSanitaryProducts: Boolean,
-    customerOnly: Boolean,
-    dryer: Boolean,
+    isOpen: {
+      type: Boolean,
+      default: true,
+    },
+    hasBabyChangingTable: {
+      type: Boolean,
+      default: false,
+    },
+    providesSanitaryProducts: {
+      type: Boolean,
+      default: false,
+    },
+    customerOnly: {
+      type: Boolean,
+      default: false,
+    },
+    dryer: {
+      type: Boolean,
+      default: false,
+    },
   },
 });
 
@@ -23,4 +54,26 @@ restroomSchema.statics.getRestroomByLocation = async function (location) {
   throw new Error("No restroom found at specified location");
 };
 
-module.exports = mongoose.model("Restroom", restroomSchema);
+restroomSchema.statics.addRestroom = async function (restroomData) {
+  const { location } = restroomData;
+
+  if (!location) {
+    throw new Error("Location is required");
+  }
+
+  //Duplicate Check
+  const existingRestroom = await this.findOne({ location });
+  if (existingRestroom) {
+    throw new Error("Restroom already exists at specified location");
+  }
+
+  const newRestroom = new this(restroomData);
+
+  await newRestroom.save();
+
+  return newRestroom;
+};
+
+const Restroom = mongoose.model("Restroom", restroomSchema);
+
+module.exports = Restroom;
