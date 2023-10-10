@@ -87,6 +87,7 @@ app.post("/createRestroom", async (req, res) => {
       accessibility,
       facility,
       text,
+      reviewerId
     } = req.body;
 
     const restroomData = {
@@ -103,11 +104,12 @@ app.post("/createRestroom", async (req, res) => {
         dryer,
       },
     };
-
-    const result1 = await insertRestroom(restroomData);
+    const result1 = await Restroom.addRestroom(restroomData);
+    //const result1 = await insertRestroom(restroomData);
     const restroomId = await Restroom.getRestroomByLocation(location);
     const reviewData = {
       restroomId,
+      reviewerId,
       text,
       metrics: {
         hasBabyChangingTable,
@@ -121,13 +123,14 @@ app.post("/createRestroom", async (req, res) => {
         facility,
       },
     };
-    const result2 = await insertReview(reviewData);
+    const reslut2 = await Review.addReview(reviewData)
+    //const result2 = await insertReview(reviewData);
 
-    if (result1.success == true && result2.success == true) {
+    /*if (result1.success == true && result2.success == true) {
       res.status(200).json({ message: "Successfully created a restroom!" });
     } else {
       res.status(400).json({ error: "Failed to create restroom or review." });
-    }
+    }*/
   } catch (err) {
     console.error(err);
     res
@@ -136,6 +139,7 @@ app.post("/createRestroom", async (req, res) => {
   }
 });
 
+/*
 async function insertRestroom(data) {
   const restroomCollection = db.collection("restrooms");
   try {
@@ -157,3 +161,4 @@ async function insertReview(data) {
     return { success: false, error: err };
   }
 }
+*/

@@ -19,6 +19,25 @@ const reviewSchema = new mongoose.Schema({
   },
 });
 
+restroomSchema.statics.addReview = async function (reviewData) {
+  const { reviewerId, restroomId, ratingMetrics } = reviewData;
+
+  if (!reviewerId || !restroomId || !ratingMetrics) {
+    throw new Error("Required fields are missing");
+  }
+
+  //Duplicate Check
+  const existingReview = await this.findOne({ reviewerId, restroomId });
+  if (existingReview) {
+    throw new Error("This user's review for this restroom already exists.");
+  }
+
+  const newReview = new this(reviewData);
+
+  await newReview.save();
+
+  return newReview;
+};
 const Review = mongoose.model("Review", reviewSchema);
 
 module.exports = Review;
