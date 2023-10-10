@@ -39,9 +39,10 @@ app.use((req, res, next) => {
   const titles = {
     "/": "TopFlush",
     "/home": "Home Page",
+    "/createRestroom": "Create Restroom"
     // ... other paths
   };
-  res.locals.title = titles[req.path] || "Default Title";
+  res.locals.title = titles[req.path] || "TopFlush";
   next();
 });
 
@@ -59,3 +60,8 @@ app.get("/", async (req, res) => {
 app.get("/home", (req, res) => {
   res.render("home");
 });
+
+app.get("/create-restroom", (req, res) => {
+  res.render("createRestroom");
+});
+

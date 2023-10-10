@@ -5,6 +5,7 @@ const restroomSchema = new mongoose.Schema({
   capacity: Number,
   reviews: [mongoose.Schema.Types.ObjectId],
   rating: Number,
+  pathToImage: String,
   metrics: {
     isOpen: Boolean,
     hasBabyChangingTable: Boolean,
