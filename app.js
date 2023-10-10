@@ -18,7 +18,7 @@ let db;
 MongoClient.connect(url)
   .then((client) => {
     db = client.db(dbName);
-    const collection = db.collection("restroom");
+    const collection = db.collection("restrooms");
     collection
       .createIndex({ name: 1 }, { unique: true, background: true })
       .then(() => {
@@ -47,7 +47,7 @@ app.use((req, res, next) => {
 
 app.get("/", async (req, res) => {
   try {
-    const collection = db.collection("restroom");
+    const collection = db.collection("restrooms");
     const data = await collection.find({}).toArray();
     res.render("index", { data }); 
   } catch (err) {
