@@ -113,7 +113,9 @@ app.post("/createRestroom", async (req, res) => {
     const result2 = await insertReview(reviewData);
 
     if (result1.success == true && result2.success == true) {
-      res.redirect("/home");
+      res.status(200).json({ message: "Successfully created a restroom!" });
+    } else {
+      res.status(400).json({ error: "Failed to create restroom or review." });
     }
 
   } catch (err) {

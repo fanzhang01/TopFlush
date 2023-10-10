@@ -35,3 +35,35 @@
     <p>* are required</p><br>
     <input type="submit" class="start-button" value="Submit">
 </form>
+
+<script type="text/javascript">
+    document.getElementById('restroomForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(e.target);
+
+        try {
+            const response = await fetch('/createRestroom', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+
+            const result = await response.json();
+
+            // Use alert to display the message from the server
+            if (result.message) {
+                alert(result.message);
+            } else if (result.error) {
+                alert(result.error);
+            }
+
+        } catch (error) {
+            console.error('There has been a problem with your fetch operation:', error);
+            alert('An error occurred: ' + error.message);
+        }
+    });
+</script>
