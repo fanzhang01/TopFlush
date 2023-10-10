@@ -104,8 +104,10 @@ app.post("/createRestroom", async (req, res) => {
         dryer,
       },
     };
-    const result1 = await Restroom.addRestroom(restroomData);
-    //const result1 = await insertRestroom(restroomData);
+
+    const location = { address, city, state };
+    await Restroom.addRestroom(restroomData);
+
     const restroomId = await Restroom.getRestroomByLocation(location);
     const reviewData = {
       restroomId,
@@ -123,42 +125,18 @@ app.post("/createRestroom", async (req, res) => {
         facility,
       },
     };
-    const reslut2 = await Review.addReview(reviewData)
-    //const result2 = await insertReview(reviewData);
 
-    /*if (result1.success == true && result2.success == true) {
-      res.status(200).json({ message: "Successfully created a restroom!" });
-    } else {
-      res.status(400).json({ error: "Failed to create restroom or review." });
-    }*/
+    await Review.addReview(reviewData)
+
   } catch (err) {
     console.error(err);
     res
       .status(500)
-      .send({ error: "Error creating restroom", details: err.message });
+      .send(`
+      <script>
+        alert('${err.message}');
+      </script>
+    `);
+
   }
 });
-
-/*
-async function insertRestroom(data) {
-  const restroomCollection = db.collection("restrooms");
-  try {
-    await restroomCollection.insertOne(data);
-    return { success: true };
-  } catch (err) {
-    console.error(err);
-    return { success: false, error: err };
-  }
-}
-
-async function insertReview(data) {
-  const reviewCollection = db.collection("reviews");
-  try {
-    await reviewCollection.insertOne(data);
-    return { success: true };
-  } catch (err) {
-    console.error(err);
-    return { success: false, error: err };
-  }
-}
-*/
