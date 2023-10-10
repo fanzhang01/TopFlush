@@ -15,4 +15,12 @@ const restroomSchema = new mongoose.Schema({
   },
 });
 
+restroomSchema.statics.getRestroomByLocation = async function (location) {
+  const restroom = await this.findOne({ location });
+  if (restroom) {
+    return restroom._id; // return the ObjectId of the restroom document
+  }
+  throw new Error("No restroom found at specified location");
+};
+
 module.exports = mongoose.model("Restroom", restroomSchema);

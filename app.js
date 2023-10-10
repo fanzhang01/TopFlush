@@ -1,6 +1,7 @@
 const express = require("express");
 const { MongoClient } = require("mongodb");
 const expressLayouts = require("express-ejs-layouts");
+const bodyParser = require("body-parser");
 
 const app = express();
 const url = "mongodb://localhost:27017";
@@ -12,6 +13,7 @@ app.set("views", "views");
 app.use("/public", express.static(__dirname + "/public"));
 app.use(expressLayouts);
 app.set("layout", "layout");
+app.use(bodyParser.urlencoded({ extended: true }));
 
 let db;
 
@@ -61,7 +63,83 @@ app.get("/home", (req, res) => {
   res.render("home");
 });
 
-app.get("/create-restroom", (req, res) => {
+app.get("/createRestroom", (req, res) => {
   res.render("createRestroom");
 });
 
+app.post("/createRestroom", async (req, res) => {
+  try {
+    const {
+      location,
+      capacity,
+      hasBabyChangingTable,
+      providesSanitaryProducts,
+      customerOnly,
+      dryer,
+      cleanliness,
+      accessibility,
+      facility,
+      text,
+    } = req.body;
+    
+    const restroomData = {
+      location,
+      capacity,
+      metrics: {
+        hasBabyChangingTable,
+        providesSanitaryProducts,
+        customerOnly,
+        dryer,
+      },
+    };
+
+    const result1 = await insertRestroom(restroomData);
+    const restroomId = await restroomSchema.statics.getRestroomByLocation(location);
+    const reviewData = {
+      restroomId,
+      text,
+      metrics: {
+        hasBabyChangingTable,
+        providesSanitaryProducts,
+        customerOnly,
+        dryer,
+      },
+      ratingMetrics: {
+        cleanliness,
+        accessibility,
+        facility,
+      },
+    };
+    const result2 = await insertReview(reviewData);
+
+    if (result1.success == true && result2.success == true) {
+      res.redirect("/home");
+    }
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ error: 'Error creating restroom', details: err.message });
+  }
+});
+
+async function insertRestroom(data) {
+  const restroomCollection = db.collection("restrooms");
+  try {
+    await restroomCollection.insertOne(data);
+    return { success: true };
+  } catch (err) {
+    console.error(err);
+    return { success: false, error: err };
+  }
+}
+
+async function insertReview(data) {
+  const reviewCollection = db.collection("reviews");
+  try {
+    await reviewCollection.insertOne(data);
+    return { success: true };
+  } catch (err) {
+    console.error(err);
+    return { success: false, error: err };
+  }
+}
