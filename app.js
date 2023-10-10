@@ -18,6 +18,15 @@ let db;
 MongoClient.connect(url)
   .then((client) => {
     db = client.db(dbName);
+    const collection = db.collection("restroom");
+    collection
+      .createIndex({ name: 1 }, { unique: true, background: true })
+      .then(() => {
+        console.log("Collection and index ensured.");
+      })
+      .catch((err) => {
+        console.error("Error ensuring collection/index:", err);
+      });
     app.listen(3000, () => {
       console.log("Server running on http://localhost:3000. Use Control + C to exit");
     });
@@ -38,7 +47,7 @@ app.use((req, res, next) => {
 
 app.get("/", async (req, res) => {
   try {
-    const collection = db.collection("mycollection");
+    const collection = db.collection("restroom");
     const data = await collection.find({}).toArray();
     res.render("index", { data }); 
   } catch (err) {
