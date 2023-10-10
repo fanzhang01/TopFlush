@@ -55,3 +55,7 @@ app.get("/", async (req, res) => {
     res.send("Error");
   }
 });
+
+app.get("/home", (req, res) => {
+  res.render("home");
+});
