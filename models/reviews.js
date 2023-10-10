@@ -38,6 +38,16 @@ reviewSchema.statics.addReview = async function (reviewData) {
 
   return newReview;
 };
+
+reviewSchema.statics.getReviewByRestroom = async function (restroomId) {
+  if (!restroomId) {
+    throw new Error("RestroomID is required");
+  }
+
+  const reviews = await this.find({ restroomId });
+  return reviews;
+}
+
 const Review = mongoose.model("Review", reviewSchema);
 
 module.exports = Review;
