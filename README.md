@@ -1,11 +1,25 @@
+# TopFlush: Public Restroom Review Platform
 
-# TopFlush
+**TopFlush** provides an advanced solution for users to locate and review public restrooms seamlessly. By leveraging the power of the Google Maps API, it allows users to pinpoint restrooms on a map and furnish detailed reviews. The platform emphasizes cleanliness, accessibility, and the quality of amenities.
 
-TopFlush is a cutting-edge web application designed to revolutionize the way people find and review public restrooms. Integrated with Google Maps API, the platform allows users to mark restrooms on a map and provide comprehensive reviews based on cleanliness, ease of location, and sufficiency of facilities. Users can also upload images to accompany their reviews, offering a visual guide to potential visitors. To ensure the most accurate and up-to-date information, restrooms that are reported as no longer available by a certain number of users are automatically removed from the map. Additional features include the ability to sort restrooms based on reviews or distance from the user, making it easier than ever to find the best restroom options nearby.
+## Features
 
-## How to Use
+- **Review Integration**: Users can evaluate restrooms on various metrics and even upload images to enhance their reviews.
+- **Dynamic Updation**: Restrooms reported as unavailable by multiple users are automatically delisted, ensuring relevancy.
+- **Optimized Search**: Users can filter restrooms based on ratings or proximity for a personalized experience.
 
- 1. Install [Node.js](https://nodejs.org/en), [MongoDB](https://www.mongodb.com/).
- 2. Download this project and extract to a folder.
- 3. Open the terminal and input `npm install` to install relevant packages.
- 4. Input `node app.js` to start.
+## Setup & Usage
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/en/)
+- [MongoDB](https://www.mongodb.com/)
+
+### Installation Steps
+
+1. Download the repository and extract its contents to a desired directory.
+2. Navigate to the directory via terminal.
+3. Execute `npm install` to fetch the necessary dependencies.
+4. Start the application using `node app.js`.
+
+Experience a hassle-free way to evaluate and locate public restrooms with **TopFlush**.
