@@ -33,7 +33,7 @@ MongoClient.connect(url)
       .catch((err) => {
         console.error("Error ensuring collection/index:", err);
       });
-    app.listen(3000, () => {
+    app.listen(3001, () => {
       console.log(
         "Server running on http://localhost:3000. Use Control + C to exit"
       );
