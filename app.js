@@ -8,7 +8,7 @@ const Review = require("./models/reviews");
 const User = require("./models/users");
 
 const app = express();
-const url = "mongodb://localhost:27017";
+const url = "mongodb://127.0.0.1:27017";
 const dbName = "TopFlush";
 
 app.set("view engine", "ejs");
@@ -33,7 +33,7 @@ MongoClient.connect(url)
       .catch((err) => {
         console.error("Error ensuring collection/index:", err);
       });
-    app.listen(3001, () => {
+    app.listen(3000, () => {
       console.log(
         "Server running on http://localhost:3000. Use Control + C to exit"
       );
@@ -68,6 +68,14 @@ app.get("/", async (req, res) => {
 app.get("/home", (req, res) => {
   res.render("home");
 });
+
+app.get("/login", (req, res) => {
+  res.render("login")
+});
+
+app.get("/register", (req, res) => {
+  res.render("register")
+})
 
 app.get("/createRestroom", (req, res) => {
   res.render("createRestroom");
