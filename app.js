@@ -70,12 +70,29 @@ app.get("/home", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  res.render("login")
+  res.render("login");
 });
 
 app.get("/register", (req, res) => {
-  res.render("register")
-})
+  res.render("register");
+});
+
+app.post("/register", async (req, res) => {
+  const { username, email, password, gender } = req.body;
+  const user = new User({
+    email,
+    username,
+    password,
+    gender,
+  });
+  try {
+    await user.save();
+    res.redirect('/login'); 
+  } catch (error) {
+    console.error(error);
+    res.redirect('/register');
+  }
+});
 
 app.get("/createRestroom", (req, res) => {
   res.render("createRestroom");
