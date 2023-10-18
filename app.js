@@ -8,7 +8,7 @@ const Review = require("./models/reviews");
 const User = require("./models/users");
 
 const app = express();
-const url = "mongodb://localhost:27017/TopFlush";
+const url = "mongodb://127.0.0.1:27017/TopFlush";
 
 app.set("view engine", "ejs");
 app.set("views", "views");
@@ -56,6 +56,46 @@ app.get("/", async (req, res) => {
 app.get("/home", (req, res) => {
   res.render("home");
 });
+
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+
+app.get("/register", (req, res) => {
+  res.render("register");
+});
+
+app.post("/register", async (req, res) => {
+  const { username, email, password, gender } = req.body;
+  console.log("USER: ", username);
+  const user = new User({
+    email,
+    username,
+    password,
+    gender,
+  });
+  try {
+    if (!username || !email || !password || !gender) {
+      /*return res.status(400).redirect('/register', {
+        error: 'All fields are required'
+      }); */
+      throw new Error("All fields are required");
+    } else {
+      await user.save();
+      console.log("User added");
+      res.redirect('/home');
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(400).send(`
+    <script>
+      alert('${error.message}');
+    </script>
+  `);
+  }
+});
+
+module.exports = app;
 
 app.get("/createRestroom", (req, res) => {
   res.render("createRestroom");
