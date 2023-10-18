@@ -8,7 +8,7 @@ const Review = require("./models/reviews");
 const User = require("./models/users");
 
 const app = express();
-const url = "mongodb://localhost:27017/TopFlush";
+const url = "mongodb://127.0.0.1:27017/TopFlush";
 
 app.set("view engine", "ejs");
 app.set("views", "views");
@@ -55,6 +55,32 @@ app.get("/", async (req, res) => {
 
 app.get("/home", (req, res) => {
   res.render("home");
+});
+
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+
+app.get("/register", (req, res) => {
+  res.render("register");
+});
+
+app.post("/register", async (req, res) => {
+  const { username, email, password, gender } = req.body;
+  const user = new User({
+    email,
+    username,
+    password,
+    gender,
+  });
+  try {
+    await user.save();
+    console.log("User added");
+    res.redirect('/home'); 
+  } catch (error) {
+    console.error(error);
+    res.redirect('/register');
+  } 
 });
 
 app.get("/createRestroom", (req, res) => {
