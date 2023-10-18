@@ -8,7 +8,9 @@ const Review = require("./models/reviews");
 const User = require("./models/users");
 
 const app = express();
+
 const url = "mongodb://127.0.0.1:27017/TopFlush";
+
 
 app.set("view engine", "ejs");
 app.set("views", "views");
@@ -22,6 +24,14 @@ mongoose
   .connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log("MongoDB connected via Mongoose.");
+    app.listen(3000, () => {
+      console.log("Server running on http://localhost:3000. Use Control + C to exit");
+    });
+  })
+  .catch((err) => {
+    console.error("MongoDB connection failed:", err);
+  });
+
     app.listen(3000, () => {
       console.log(
         "Server running on http://localhost:3000. Use Control + C to exit"
@@ -67,7 +77,9 @@ app.get("/register", (req, res) => {
 
 app.post("/register", async (req, res) => {
   const { username, email, password, gender } = req.body;
+
   console.log("USER: ", username);
+
   const user = new User({
     email,
     username,
@@ -75,6 +87,16 @@ app.post("/register", async (req, res) => {
     gender,
   });
   try {
+
+    await user.save();
+    res.redirect('/login'); 
+  } catch (error) {
+    console.error(error);
+    res.redirect('/register');
+  }
+});
+
+
     if (!username || !email || !password || !gender) {
       /*return res.status(400).redirect('/register', {
         error: 'All fields are required'
@@ -96,6 +118,7 @@ app.post("/register", async (req, res) => {
 });
 
 module.exports = app;
+
 
 app.get("/createRestroom", (req, res) => {
   res.render("createRestroom");
