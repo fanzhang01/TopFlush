@@ -1,5 +1,5 @@
 const express = require("express");
-const { MongoClient } = require("mongodb");
+const mongoose = require("mongoose");
 const expressLayouts = require("express-ejs-layouts");
 const bodyParser = require("body-parser");
 
@@ -8,8 +8,7 @@ const Review = require("./models/reviews");
 const User = require("./models/users");
 
 const app = express();
-const url = "mongodb://localhost:27017";
-const dbName = "TopFlush";
+const url = "mongodb://localhost:27017/TopFlush";
 
 app.set("view engine", "ejs");
 app.set("views", "views");
@@ -19,20 +18,10 @@ app.use(expressLayouts);
 app.set("layout", "layout");
 app.use(bodyParser.urlencoded({ extended: true }));
 
-let db;
-
-MongoClient.connect(url)
-  .then((client) => {
-    db = client.db(dbName);
-    const collection = db.collection("restrooms");
-    collection
-      .createIndex({ name: 1 }, { unique: true, background: true })
-      .then(() => {
-        console.log("Collection and index ensured.");
-      })
-      .catch((err) => {
-        console.error("Error ensuring collection/index:", err);
-      });
+mongoose
+  .connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log("MongoDB connected via Mongoose.");
     app.listen(3000, () => {
       console.log(
         "Server running on http://localhost:3000. Use Control + C to exit"
@@ -56,8 +45,7 @@ app.use((req, res, next) => {
 
 app.get("/", async (req, res) => {
   try {
-    const collection = db.collection("restrooms");
-    const data = await collection.find({}).toArray();
+    const data = await Restroom.find({});
     res.render("index", { data });
   } catch (err) {
     console.error(err);
@@ -106,10 +94,10 @@ app.post("/createRestroom", async (req, res) => {
       },
     };
 
-    const location = { address, city, state };
-    await Restroom.addRestroom(restroomData);
+    await Restroom.create(restroomData);
 
-    const restroomId = await Restroom.getRestroomByLocation(location);
+    const restroomId = await Restroom.findOne({ "location.address": address });
+
     const reviewData = {
       restroomId,
       reviewerId,
@@ -127,7 +115,8 @@ app.post("/createRestroom", async (req, res) => {
       },
     };
 
-    await Review.addReview(reviewData);
+    await Review.create(reviewData);
+
   } catch (err) {
     console.error(err);
     res.status(500).send(`

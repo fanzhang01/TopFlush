@@ -1,11 +1,72 @@
+# TopFlush: Public Restroom Review Platform
 
-# TopFlush
+**TopFlush** provides an advanced solution for users to locate and review public restrooms seamlessly. By leveraging the power of the Google Maps API, it allows users to pinpoint restrooms on a map and furnish detailed reviews. The platform emphasizes cleanliness, accessibility, and the quality of amenities.
 
-TopFlush is a cutting-edge web application designed to revolutionize the way people find and review public restrooms. Integrated with Google Maps API, the platform allows users to mark restrooms on a map and provide comprehensive reviews based on cleanliness, ease of location, and sufficiency of facilities. Users can also upload images to accompany their reviews, offering a visual guide to potential visitors. To ensure the most accurate and up-to-date information, restrooms that are reported as no longer available by a certain number of users are automatically removed from the map. Additional features include the ability to sort restrooms based on reviews or distance from the user, making it easier than ever to find the best restroom options nearby.
+## Features
 
-## How to Use
+- **Review Integration**: Users can evaluate restrooms on various metrics and even upload images to enhance their reviews.
+- **Dynamic Updation**: Restrooms reported as unavailable by multiple users are automatically delisted, ensuring relevancy.
+- **Optimized Search**: Users can filter restrooms based on ratings or proximity for a personalized experience.
 
- 1. Install [Node.js](https://nodejs.org/en), [MongoDB](https://www.mongodb.com/).
- 2. Download this project and extract to a folder.
- 3. Open the terminal and input `npm install` to install relevant packages.
- 4. Input `node app.js` to start.
+## Database Structure
+
+### Topflush Database Overview
+
+Our application, TopFlush, aims to provide users with a convenient way to find nearby restrooms. We've chosen MongoDB as our NoSQL database for this project. Our data is organized into three primary collections: Users, Restrooms, and Reviews.
+
+#### **Users Collection**
+
+The Users Collection holds detailed information about each user, allowing them to personalize their data, log in, and submit reviews.
+
+| Name            | Type     | Description                                                  |
+|-----------------|----------|--------------------------------------------------------------|
+| _id             | Object   | Globally unique identifier to represent the user             |
+| Email           | String   | User's email (validated for format)                          |
+| Username        | String   | Chosen username                                              |
+| Gender          | Number   | 1 for Male, 0 for Female                                     |
+| Hashed password | String   | User's encrypted login password                              |
+| Reviews         | Array    | Contains the IDs of reviews the user has posted              |
+
+#### **Restrooms Collection**
+
+This collection comprises details about restrooms in Hoboken, capturing their locations, capacity, and more. It also provides specific metrics like availability, baby changing facilities, and sanitary product provision.
+
+| Name      | Type       | Description                                                                 |
+|-----------|------------|-----------------------------------------------------------------------------|
+| _id       | Object     | Unique identifier for the restroom                                          |
+| Location  | String     | Restroom location                                                           |
+| Capacity  | Number     | Maximum occupancy                                                           |
+| Reviews   | Array      | List of review IDs related to this restroom                                 |
+| Rating    | String     | Cumulative rating (from 1-5)                                                |
+| Metrics   | Subdocument| Object detailing various metrics like restroom availability and amenities    |
+
+#### **Reviews Collection**
+
+The Reviews Collection centralizes all the feedback submitted by users, detailing their experiences and ratings for specific restrooms.
+
+| Name       | Type       | Description                                                          |
+|------------|------------|----------------------------------------------------------------------|
+| _id        | Object     | Unique identifier for the review                                     |
+| ReviewerId | String     | ID of the user who provided the review                               |
+| RestroomId | String     | ID of the reviewed restroom                                          |
+| Text       | String     | Detailed content of the review                                       |
+| Rating     | Number     | Rating given by the user, ranging from 1 to 5                        |
+| Metrics    | Subdocument| Object encapsulating various metrics associated with the restroom     |
+
+---
+
+## Setup & Usage
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/en/)
+- [MongoDB](https://www.mongodb.com/)
+
+### Installation Steps
+
+1. Download the repository and extract its contents to a desired directory.
+2. Navigate to the directory via terminal.
+3. Execute `npm install` to fetch the necessary dependencies.
+4. Start the application using `node app.js`.
+
+Experience a hassle-free way to evaluate and locate public restrooms with **TopFlush**.
