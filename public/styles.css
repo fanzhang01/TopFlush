@@ -13,9 +13,12 @@ header {
 }
 
 .header-content {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
 }
 
 footer {
@@ -67,4 +70,19 @@ footer {
 
 .start-button:hover {
   background-color: #34495e;
+}
+
+.header-link {
+  text-decoration: none;
+  color: white;
+  margin-bottom: 5px;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.center-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
 }
