@@ -4,7 +4,7 @@ const Restroom = require("./models/restrooms");
 async function seedDB() {
 
     await Restroom.deleteMany({});
-    
+
   const initRestroom = [
     {
       location: {
@@ -38,7 +38,6 @@ async function seedDB() {
     await Restroom.addRestroom(restroom);
   }
 
-  await mongoose.disconnect();
 
   console.log("Database has been seeded!");
 }
