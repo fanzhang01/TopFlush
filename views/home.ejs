@@ -4,3 +4,14 @@
 <p><a href = createRestroom>Create Restroom</a></p>
 <!-- backbutton -->
 <p><a href = "/">Back</a></p>
+
+<h2>Restrooms in NJ</h2>
+<ul>
+  <% restrooms.forEach(function(restroom) { %>
+    <li>
+      <strong>Address:</strong> <%= restroom.location.address %><br>
+      <strong>City:</strong> <%= restroom.location.city %><br>
+      <strong>Rating:</strong> <%= restroom.rating %> out of 5<br>
+    </li>
+  <% }); %>
+</ul>

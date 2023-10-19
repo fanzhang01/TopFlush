@@ -61,8 +61,14 @@ app.get("/", async (req, res) => {
   }
 });
 
-app.get("/home", (req, res) => {
-  res.render("home");
+app.get("/home", async (req, res) => {
+  try {
+    const restroomsInNJ = await Restroom.find({ "location.state": "NJ" });
+    res.render("home", { restrooms: restroomsInNJ });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 app.get("/login", (req, res) => {

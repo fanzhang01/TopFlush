@@ -2,8 +2,7 @@ const mongoose = require("mongoose");
 const Restroom = require("./models/restrooms");
 
 async function seedDB() {
-
-    await Restroom.deleteMany({});
+  await Restroom.deleteMany({});
 
   const initRestroom = [
     {
@@ -32,12 +31,24 @@ async function seedDB() {
         hasBabyChangingTable: false,
       },
     },
+    {
+      location: {
+        address: "4901 Bergenline Ave",
+        city: "West New York",
+        state: "NJ",
+      },
+      capacity: 3,
+      rating: 3,
+      metrics: {
+        isOpen: true,
+        hasBabyChangingTable: false,
+      },
+    },
   ];
 
   for (const restroom of initRestroom) {
     await Restroom.addRestroom(restroom);
   }
-
 }
 
 module.exports = seedDB;
