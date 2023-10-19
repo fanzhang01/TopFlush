@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const Restroom = require("./models/restrooms");
 const Review = require("./models/reviews");
 const User = require("./models/users");
+const seedDB = require('./seed');
 
 const app = express();
 const url = "mongodb://127.0.0.1:27017/TopFlush";
@@ -22,6 +23,13 @@ mongoose
   .connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log("MongoDB connected via Mongoose.");
+    seedDB()
+      .then(() => {
+        console.log("Database seeded");
+      })
+      .catch((err) => {
+        console.log("Seeding failed:", err);
+      });
     app.listen(3000, () => {
       console.log(
         "Server running on http://localhost:3000. Use Control + C to exit"

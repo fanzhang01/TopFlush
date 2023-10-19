@@ -2,9 +2,13 @@ const mongoose = require("mongoose");
 
 const restroomSchema = new mongoose.Schema({
   location: {
-    address: String,
-    city: String,
-    state: String,
+    type: {
+      address: String,
+      city: String,
+      state: String,
+    },
+    unique: true,
+    dropDups: true,
   },
   capacity: {
     type: Number,
