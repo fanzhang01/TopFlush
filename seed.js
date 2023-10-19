@@ -38,8 +38,6 @@ async function seedDB() {
     await Restroom.addRestroom(restroom);
   }
 
-
-  console.log("Database has been seeded!");
 }
 
 module.exports = seedDB;
