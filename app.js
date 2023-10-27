@@ -80,7 +80,7 @@ app.get("/register", (req, res) => {
 });
 
 app.post("/register", async (req, res) => {
-  const { username, email, password, gender } = req.body;
+  const { username, email, password, confirmedpassword, gender } = req.body;
   console.log("USER: ", username);
   const user = new User({
     email,
@@ -89,6 +89,9 @@ app.post("/register", async (req, res) => {
     gender,
   });
   try {
+    if (confirmedpassword !== password) {
+      throw new Error('Two fields are not the same')
+    }
     if (!username || !email || !password || !gender) {
       /*return res.status(400).redirect('/register', {
         error: 'All fields are required'

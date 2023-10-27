@@ -10,13 +10,16 @@
     <h1>Register</h1>
     <form method="post" action="/register">
         <div>
-            <input type="text" name="username" placeholder="Username" />
+            <input type="text" name="username" pattern = "[a-zA-Z0-9]{3,15}" placeholder="Username" />
         </div>
         <div>
             <input type="email" name="email" placeholder="Email" />
         </div>
         <div>
-            <input type="password" name="password" placeholder="Password" />
+            <input type="password" name="password" pattern = "(?=.*\d)(?=.*[a-zA-Z]).{8,}" placeholder="Password" />
+        </div>
+        <div>
+            <input type="password" name="confirmedpassword" pattern = "(?=.*\d)(?=.*[a-zA-Z]).{8,}" placeholder="Confirm Your Password" />
         </div>
         <div>
             <select name="gender" id="gender">
