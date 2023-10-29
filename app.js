@@ -183,3 +183,18 @@ app.post("/createRestroom", async (req, res) => {
     `);
   }
 });
+
+app.get('/restroom/:id', async (req, res) => {
+  const restroomId = req.params.id;
+  try {
+    // Find the restroom by ID from your database
+    const restroom = await Restroom.findById(restroomId);
+    if (restroom) {
+      res.render('restroom', { restroom });
+    } else {
+      res.status(404).send('Restroom not found');
+    }
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});

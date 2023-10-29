@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= restroom.location.address %></title>
+    <link rel="icon" type="image/x-icon" href="/public/Icon.png">
+    <link rel="stylesheet" type="text/css" href="/public/styles.css">
+</head>
+<body>
+    <h1><%= restroom.location.address %></h1>
+    <p><strong>City:</strong> <%= restroom.location.city %></p>
+    <p><strong>Disability Coverage:</strong> <%= restroom.disabilityCoverage ? 'Yes' : 'No' %></p>
+    <p><strong>Diaper Change Room:</strong> <%= restroom.diaperChangeRoom ? 'Yes' : 'No' %></p>
+    <p><strong>Cleanness Rating:</strong> 
+        <div class="star-rating">
+            <% for (let i = 1; i <= 5; i++) { %>
+                <% if (i <= restroom.cleannessRating) { %>
+                    <span class="star filled">★</span>
+                <% } else { %>
+                    <span class="star">☆</span>
+                <% } %>
+            <% } %>
+        </div>
+    </p>
+</body>
+</html>

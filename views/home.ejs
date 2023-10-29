@@ -1,16 +1,38 @@
-<h1>Home</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="icon" type="image/x-icon" href="/public/Icon.png">
+    <link rel="stylesheet" type="text/css" href="/public/styles.css">
+</head>
+<body>
+    <h1>Home</h1>
+    <p><a href="createRestroom">Create Restroom</a></p>
+    <h2>Restrooms in NJ</h2>
+    <ul class="restroom-list">
+        <% restrooms.forEach(function(restroom) { %>
+            <li class="restroom-item">
+                <a href="/restroom/<%= restroom.id %>">
+                    <img src="<%= restroom.image %>" alt="Restroom" class="restroom-image">
+                </a>
+                <div class="restroom-info">
+                    <strong>Address:</strong> <%= restroom.location.address %><br>
+                    <strong>City:</strong> <%= restroom.location.city %><br>
+                    <strong>Rating:</strong> 
+                    <div class="star-rating">
+                        <% for (let i = 1; i <= 5; i++) { %>
+                            <% if (i <= restroom.rating) { %>
+                                <span class="star filled">★</span>
+                            <% } else { %>
+                                <span class="star">☆</span>
+                            <% } %>
+                        <% } %>
+                    </div>
+                </div>
+            </li>
+        <% }); %>
+    </ul>
+</body>
+</html>
 
-<!--<a href="./login">Login/Register</a>-->
-<p><a href = createRestroom>Create Restroom</a></p>
-<!--<p><a href = "/">Back</a></p>-->
-
-<h2>Restrooms in NJ</h2>
-<ul>
-  <% restrooms.forEach(function(restroom) { %>
-    <li>
-      <strong>Address:</strong> <%= restroom.location.address %><br>
-      <strong>City:</strong> <%= restroom.location.city %><br>
-      <strong>Rating:</strong> <%= restroom.rating %> out of 5<br>
-    </li>
-  <% }); %>
-</ul>
