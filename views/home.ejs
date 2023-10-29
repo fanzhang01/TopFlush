@@ -13,7 +13,7 @@
     <ul class="restroom-list">
         <% restrooms.forEach(function(restroom) { %>
             <li class="restroom-item">
-                <a href="/restroom/<%= restroom.id %>">
+                <a href="/restroom/<%= restroom._id %>">
                     <img src="<%= restroom.image %>" alt="Restroom" class="restroom-image">
                 </a>
                 <div class="restroom-info">

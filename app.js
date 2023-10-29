@@ -19,6 +19,7 @@ app.use(expressLayouts);
 app.set("layout", "layout");
 app.use(bodyParser.urlencoded({ extended: true }));
 
+
 mongoose
   .connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
@@ -114,8 +115,19 @@ app.post("/register", async (req, res) => {
 
 module.exports = app;
 
-app.get("/createRestroom", (req, res) => {
-  res.render("createRestroom");
+app.get('/restroom/:id', async (req, res) => {
+  const restroomId = req.params.id;
+  try {
+    const restroom = await Restroom.findById(restroomId);
+    if (restroom) {
+      res.render('restroom', { restroom });
+    } else {
+      // If no restroom is found, send a 404 response with the message "Restroom not found" and its id
+      res.status(404).send(`Restroom not found with id ${restroomId}`);
+    }
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
 });
 
 app.post("/createRestroom", async (req, res) => {
@@ -184,17 +196,11 @@ app.post("/createRestroom", async (req, res) => {
   }
 });
 
-app.get('/restroom/:id', async (req, res) => {
-  const restroomId = req.params.id;
+app.get('/restrooms', async (req, res) => {
   try {
-    // Find the restroom by ID from your database
-    const restroom = await Restroom.findById(restroomId);
-    if (restroom) {
-      res.render('restroom', { restroom });
-    } else {
-      res.status(404).send('Restroom not found');
-    }
-  } catch (error) {
-    res.status(500).send(error.message);
+    const restrooms = await Restroom.find(); // Query all entries from the restrooms collection
+    res.render('restrooms', { restrooms }); // Render the restrooms view with the queried data
+  } catch (err) {
+    res.status(500).send(err.message);
   }
 });
