@@ -90,8 +90,8 @@ app.post("/register", async (req, res) => {
   });
   try {
     if (confirmedpassword !== password) {
-      throw new Error('Two fields are not the same')
-    }
+      throw new Error('Two fields are not the same');
+    } 
     if (!username || !email || !password || !gender) {
       /*return res.status(400).redirect('/register', {
         error: 'All fields are required'
@@ -104,11 +104,7 @@ app.post("/register", async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    res.status(400).send(`
-    <script>
-      alert('${error.message}');
-    </script>
-  `);
+    res.status(400).render('register', { error: error.message });
   }
 });
 
