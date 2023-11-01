@@ -184,6 +184,10 @@ app.get('/restroom/:id', async (req, res) => {
   }
 });
 
+app.get("/createRestroom", (req, res) => {
+  res.render("createRestroom");
+});
+
 app.post("/createRestroom", async (req, res) => {
   try {
     const {
