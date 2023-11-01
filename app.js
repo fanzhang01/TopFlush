@@ -190,6 +190,7 @@ app.get("/createRestroom", (req, res) => {
 
 app.post("/createRestroom", async (req, res) => {
   try {
+    console.log('getting into router');
     const {
       address,
       city,
@@ -206,23 +207,41 @@ app.post("/createRestroom", async (req, res) => {
       reviewerId,
     } = req.body;
 
+    const metrics = req.body.metrics;
+
+    for (const key in metrics) {
+      if (Array.isArray(metrics[key])) {
+        metrics[key] = metrics[key].includes("true");
+      } else {
+        metrics[key] = metrics[key] === "true";
+      }
+    }
+
+    console.log('req.body: ',req.body)
     const restroomData = {
       location: {
-        address,
-        city,
-        state,
+        address: req.body.location.address,
+        city: req.body.location.city,
+        state: req.body.location.state,
       },
-      capacity,
+      capacity: req.body.capacity,
+      ratingMetrics: {
+        cleanliness: req.body.ratingMetrics.cleanliness,
+        accessibility: req.body.ratingMetrics.accessibility,
+        facility: req.body.ratingMetrics.facility,
+      },
       metrics: {
-        hasBabyChangingTable,
-        providesSanitaryProducts,
-        customerOnly,
-        dryer,
+        hasBabyChangingTable: req.body.metrics.hasBabyChangingTable,
+        providesSanitaryProducts: req.body.metrics.providesSanitaryProducts,
+        customerOnly: req.body.metrics.customerOnly,
+        dryer: req.body.metrics.dryer,
       },
     };
-
+    
+    console.log("restroomData:", restroomData);
     await Restroom.create(restroomData);
 
+    console.log('restroom created');
     const restroomId = await Restroom.findOne({ "location.address": address });
 
     const reviewData = {
@@ -243,7 +262,15 @@ app.post("/createRestroom", async (req, res) => {
     };
 
     await Review.create(reviewData);
+    console.log('review created');
 
+    res.status(200).send(`
+      <script>
+        alert('Successfully created restroom and review.');
+        window.location.href = '/home';
+      </script>
+    `);
+    
   } catch (err) {
     console.error(err);
     res.status(500).send(`
