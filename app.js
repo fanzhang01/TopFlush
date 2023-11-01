@@ -1,4 +1,5 @@
 const express = require("express");
+const session = require("express-session");
 const mongoose = require("mongoose");
 const expressLayouts = require("express-ejs-layouts");
 const bodyParser = require("body-parser");
@@ -41,6 +42,14 @@ mongoose
     console.error("MongoDB connection failed:", err);
   });
 
+app.use(
+  session({
+    secret: "justSomeRandomSecretString",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+
 app.use((req, res, next) => {
   const titles = {
     "/": "TopFlush",
@@ -51,6 +60,23 @@ app.use((req, res, next) => {
   res.locals.title = titles[req.path] || "TopFlush";
   next();
 });
+
+app.use(async (req, res, next) => {
+  if (req.session && req.session.userId) {
+    try {
+      const user = await User.findById(req.session.userId);
+      if (user) {
+        res.locals.user = user;
+      } else {
+        delete req.session.userId;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  next();
+});
+
 
 app.get("/", async (req, res) => {
   try {
