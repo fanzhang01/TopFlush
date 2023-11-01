@@ -50,18 +50,8 @@ app.use(
   })
 );
 
-app.use((req, res, next) => {
-  const titles = {
-    "/": "TopFlush",
-    "/home": "Home Page",
-    "/createRestroom": "Create Restroom",
-    // ... other paths
-  };
-  res.locals.title = titles[req.path] || "TopFlush";
-  next();
-});
-
 app.use(async (req, res, next) => {
+  res.locals.user = res.locals.user || {};
   if (req.session && req.session.userId) {
     try {
       const user = await User.findById(req.session.userId);
@@ -77,6 +67,17 @@ app.use(async (req, res, next) => {
   next();
 });
 
+
+app.use((req, res, next) => {
+  const titles = {
+    "/": "TopFlush",
+    "/home": "Home Page",
+    "/createRestroom": "Create Restroom",
+    // ... other paths
+  };
+  res.locals.title = titles[req.path] || "TopFlush";
+  next();
+});
 
 app.get("/", async (req, res) => {
   try {
@@ -102,8 +103,35 @@ app.get("/login", (req, res) => {
   res.render("login");
 });
 
+app.get("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.redirect("/home");
+    }
+    res.clearCookie("connect.sid");
+    res.redirect("/");
+  });
+});
+
 app.get("/register", (req, res) => {
   res.render("register");
+});
+
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    const user = await User.findOne({ username, password });
+
+    if (user) {
+      req.session.userId = user._id;
+      res.redirect("/home");
+    } else {
+      res.status(401).send("Invalid username or password");
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 app.post("/register", async (req, res) => {
