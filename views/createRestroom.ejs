@@ -1,3 +1,4 @@
+<h1>Create Restroom</h1>
 <form action="/createRestroom" method="POST">
     <!-- Location -->
     <label for="address">Address*:</label><br>
@@ -64,16 +65,21 @@
     <input type="number" id="capacity" name="capacity"><br>
 
     <!-- Metrics -->
-    <input type="checkbox" id="hasBabyChangingTable" name="metrics[hasBabyChangingTable]">
+    <input type="hidden" name="metrics[hasBabyChangingTable]" value="false">
+    <input type="hidden" name="metrics[providesSanitaryProducts]" value="false">
+    <input type="hidden" name="metrics[customerOnly]" value="false">
+    <input type="hidden" name="metrics[dryer]" value="false">
+
+    <input type="checkbox" id="hasBabyChangingTable" name="metrics[hasBabyChangingTable]" value="true">
     <label for="hasBabyChangingTable">Baby Changing Table</label><br>
 
-    <input type="checkbox" id="providesSanitaryProducts" name="metrics[providesSanitaryProducts]">
+    <input type="checkbox" id="providesSanitaryProducts" name="metrics[providesSanitaryProducts]" value="true">
     <label for="providesSanitaryProducts">Sanitary Products</label><br>
 
-    <input type="checkbox" id="customerOnly" name="metrics[customerOnly]">
+    <input type="checkbox" id="customerOnly" name="metrics[customerOnly]" value="true">
     <label for="customerOnly">Customer Only</label><br>
 
-    <input type="checkbox" id="dryer" name="metrics[dryer]">
+    <input type="checkbox" id="dryer" name="metrics[dryer]" value="true">
     <label for="dryer">Hand Dryer</label><br>
 
     <!-- Rating Metrics -->
@@ -95,35 +101,3 @@
     <input type="button" value="Back" onclick="window.location.href='/home'">
     
 </form>
-
-<script type="text/javascript">
-    document.getElementById('restroomForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-
-        const formData = new FormData(e.target);
-
-        try {
-            const response = await fetch('/createRestroom', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-
-            const result = await response.json();
-
-            // Use alert to display the message from the server
-            if (result.message) {
-                alert(result.message);
-            } else if (result.error) {
-                alert(result.error);
-            }
-
-        } catch (error) {
-            console.error('There has been a problem with your fetch operation:', error);
-            alert('An error occurred: ' + error.message);
-        }
-    });
-</script>
