@@ -172,6 +172,7 @@ app.get("/restroom/:id", async (req, res) => {
   try {
     const restroom = await Restroom.findById(restroomId);
     if (restroom) {
+      console.log(restroom);
       res.render("restroom", { restroom });
     } else {
       // If no restroom is found, send a 404 response with the message "Restroom not found" and its id
