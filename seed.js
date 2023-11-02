@@ -20,7 +20,10 @@ async function seedDB() {
       },
       metrics: {
         isOpen: true,
-        hasBabyChangingTable: false,
+        hasBabyChangingTable: true,
+        providesSanitaryProducts: true,
+        customerOnly: false,
+        dryer: true,
       },
     },
     {
@@ -39,6 +42,9 @@ async function seedDB() {
       metrics: {
         isOpen: true,
         hasBabyChangingTable: false,
+        providesSanitaryProducts: true,
+        customerOnly: false,
+        dryer: true,
       },
     },
     {
@@ -56,7 +62,10 @@ async function seedDB() {
       },
       metrics: {
         isOpen: true,
-        hasBabyChangingTable: false,
+        hasBabyChangingTable: true,
+        providesSanitaryProducts: true,
+        customerOnly: true,
+        dryer: true,
       },
     },
   ];
