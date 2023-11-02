@@ -7,7 +7,7 @@ const bodyParser = require("body-parser");
 const Restroom = require("./models/restrooms");
 const Review = require("./models/reviews");
 const User = require("./models/users");
-const seedDB = require('./seed');
+const seedDB = require("./seed");
 
 const app = express();
 const url = "mongodb://127.0.0.1:27017/TopFlush";
@@ -19,7 +19,6 @@ app.use("/public", express.static(__dirname + "/public"));
 app.use(expressLayouts);
 app.set("layout", "layout");
 app.use(bodyParser.urlencoded({ extended: true }));
-
 
 mongoose
   .connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -66,7 +65,6 @@ app.use(async (req, res, next) => {
   }
   next();
 });
-
 
 app.use((req, res, next) => {
   const titles = {
@@ -145,7 +143,7 @@ app.post("/register", async (req, res) => {
   });
   try {
     if (confirmedpassword !== password) {
-      throw new Error('Two fields are not the same')
+      throw new Error("Two fields are not the same");
     }
     if (!username || !email || !password || !gender) {
       /*return res.status(400).redirect('/register', {
@@ -155,7 +153,7 @@ app.post("/register", async (req, res) => {
     } else {
       await user.save();
       console.log("User added");
-      res.redirect('/home');
+      res.redirect("/home");
     }
   } catch (error) {
     console.error(error);
@@ -169,12 +167,12 @@ app.post("/register", async (req, res) => {
 
 module.exports = app;
 
-app.get('/restroom/:id', async (req, res) => {
+app.get("/restroom/:id", async (req, res) => {
   const restroomId = req.params.id;
   try {
     const restroom = await Restroom.findById(restroomId);
     if (restroom) {
-      res.render('restroom', { restroom });
+      res.render("restroom", { restroom });
     } else {
       // If no restroom is found, send a 404 response with the message "Restroom not found" and its id
       res.status(404).send(`Restroom not found with id ${restroomId}`);
@@ -190,7 +188,7 @@ app.get("/createRestroom", (req, res) => {
 
 app.post("/createRestroom", async (req, res) => {
   try {
-    console.log('getting into router');
+    console.log("getting into router");
     const {
       address,
       city,
@@ -217,7 +215,14 @@ app.post("/createRestroom", async (req, res) => {
       }
     }
 
-    console.log('req.body: ',req.body)
+    console.log("req.body: ", req.body);
+    const rating =
+      (parseFloat(req.body.ratingMetrics.cleanliness) +
+        parseFloat(req.body.ratingMetrics.accessibility) +
+        parseFloat(req.body.ratingMetrics.facility)) /
+      3;
+    console.log('rating is:', rating);
+    console.log(req.body.ratingMetrics.cleanliness);
     const restroomData = {
       location: {
         address: req.body.location.address,
@@ -225,6 +230,7 @@ app.post("/createRestroom", async (req, res) => {
         state: req.body.location.state,
       },
       capacity: req.body.capacity,
+      rating,
       ratingMetrics: {
         cleanliness: req.body.ratingMetrics.cleanliness,
         accessibility: req.body.ratingMetrics.accessibility,
@@ -237,11 +243,11 @@ app.post("/createRestroom", async (req, res) => {
         dryer: req.body.metrics.dryer,
       },
     };
-    
+
     console.log("restroomData:", restroomData);
     await Restroom.create(restroomData);
 
-    console.log('restroom created');
+    console.log("restroom created");
     const restroomId = await Restroom.findOne({ "location.address": address });
 
     const reviewData = {
@@ -262,7 +268,7 @@ app.post("/createRestroom", async (req, res) => {
     };
 
     await Review.create(reviewData);
-    console.log('review created');
+    console.log("review created");
 
     res.status(200).send(`
       <script>
@@ -270,7 +276,6 @@ app.post("/createRestroom", async (req, res) => {
         window.location.href = '/home';
       </script>
     `);
-    
   } catch (err) {
     console.error(err);
     res.status(500).send(`
@@ -281,10 +286,10 @@ app.post("/createRestroom", async (req, res) => {
   }
 });
 
-app.get('/restrooms', async (req, res) => {
+app.get("/restrooms", async (req, res) => {
   try {
     const restrooms = await Restroom.find(); // Query all entries from the restrooms collection
-    res.render('restrooms', { restrooms }); // Render the restrooms view with the queried data
+    res.render("restrooms", { restrooms }); // Render the restrooms view with the queried data
   } catch (err) {
     res.status(500).send(err.message);
   }
