@@ -13,9 +13,17 @@ async function seedDB() {
       },
       capacity: 3,
       rating: 4,
+      ratingMetrics: {
+        cleanliness: 4,
+        accessibility: 5,
+        facility: 3,
+      },
       metrics: {
         isOpen: true,
-        hasBabyChangingTable: false,
+        hasBabyChangingTable: true,
+        providesSanitaryProducts: true,
+        customerOnly: false,
+        dryer: true,
       },
     },
     {
@@ -26,9 +34,17 @@ async function seedDB() {
       },
       capacity: 6,
       rating: 5,
+      ratingMetrics: {
+        cleanliness: 5,
+        accessibility: 5,
+        facility: 5,
+      },
       metrics: {
         isOpen: true,
         hasBabyChangingTable: false,
+        providesSanitaryProducts: true,
+        customerOnly: false,
+        dryer: true,
       },
     },
     {
@@ -39,14 +55,23 @@ async function seedDB() {
       },
       capacity: 3,
       rating: 3,
+      ratingMetrics: {
+        cleanliness: 3,
+        accessibility: 3,
+        facility: 3,
+      },
       metrics: {
         isOpen: true,
-        hasBabyChangingTable: false,
+        hasBabyChangingTable: true,
+        providesSanitaryProducts: true,
+        customerOnly: true,
+        dryer: true,
       },
     },
   ];
 
   for (const restroom of initRestroom) {
+    //console.log(restroom)
     await Restroom.addRestroom(restroom);
   }
 }
