@@ -143,7 +143,7 @@ app.post("/register", async (req, res) => {
   });
   try {
     if (confirmedpassword !== password) {
-      throw new Error("Two fields are not the same");
+      throw new Error("Passwords do not match");
     }
     if (!username || !email || !password || !gender) {
       /*return res.status(400).redirect('/register', {
