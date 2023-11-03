@@ -2,6 +2,7 @@ const express = require("express");
 const { MongoClient } = require("mongodb");
 const expressLayouts = require("express-ejs-layouts");
 const bodyParser = require("body-parser");
+const session = require("express-session");
 
 const Restroom = require("./models/restrooms");
 const Review = require("./models/reviews");
@@ -11,6 +12,10 @@ const app = express();
 const url = "mongodb://localhost:27017";
 const dbName = "TopFlush";
 
+const authRoutes = require('./auth');
+
+app.use('/auth', authRoutes);
+
 app.set("view engine", "ejs");
 app.set("views", "views");
 
@@ -18,6 +23,13 @@ app.use("/public", express.static(__dirname + "/public"));
 app.use(expressLayouts);
 app.set("layout", "layout");
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(session({
+  secret: 'your secret key',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}));
 
 let db;
 
@@ -44,6 +56,7 @@ MongoClient.connect(url)
   });
 
 app.use((req, res, next) => {
+  res.locals.user = req.session.user;
   const titles = {
     "/": "TopFlush",
     "/home": "Home Page",
@@ -70,10 +83,26 @@ app.get("/home", (req, res) => {
 });
 
 app.get("/createRestroom", (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
   res.render("createRestroom");
 });
 
+app.get('/login', (req, res) => {
+  res.render('login');
+});
+
+app.get('/register', (req, res) => {
+  res.render('register');
+});
+
+
 app.post("/createRestroom", async (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
+  
   try {
     const {
       address,
@@ -88,8 +117,9 @@ app.post("/createRestroom", async (req, res) => {
       accessibility,
       facility,
       text,
-      reviewerId,
     } = req.body;
+
+    const userId = req.session.user.id;
 
     const restroomData = {
       location: {
@@ -112,7 +142,7 @@ app.post("/createRestroom", async (req, res) => {
     const restroomId = await Restroom.getRestroomByLocation(location);
     const reviewData = {
       restroomId,
-      reviewerId,
+      reviewerId: userId,
       text,
       metrics: {
         hasBabyChangingTable,
