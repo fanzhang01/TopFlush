@@ -2,9 +2,13 @@ const mongoose = require("mongoose");
 
 const restroomSchema = new mongoose.Schema({
   location: {
-    address: String,
-    city: String,
-    state: String,
+    type: {
+      address: String,
+      city: String,
+      state: String,
+    },
+    unique: true,
+    dropDups: true,
   },
   capacity: {
     type: Number,
@@ -17,6 +21,20 @@ const restroomSchema = new mongoose.Schema({
   rating: {
     type: Number,
     default: null,
+  },
+  ratingMetrics: {
+    cleanliness: {
+      type: Number,
+      default: null,
+    },
+    accessibility: {
+      type: Number,
+      default: null,
+    },
+    facility: {
+      type: Number,
+      default: null,
+    },
   },
   pathToImage: {
     type: String,
@@ -73,6 +91,32 @@ restroomSchema.statics.addRestroom = async function (restroomData) {
 
   return newRestroom;
 };
+
+async function calculateRatingMetrics(restroomId) {
+  const pipeline = [
+    { $match: { restroomId: mongoose.Types.ObjectId(restroomId) } },
+    {
+      $group: {
+        _id: "$restroomId",
+        avgCleanliness: { $avg: "$ratingMetrics.cleanliness" },
+        avgAccessibility: { $avg: "$ratingMetrics.accessibility" },
+        avgFacility: { $avg: "$ratingMetrics.facility" },
+      },
+    },
+  ];
+
+  const results = await Review.aggregate(pipeline);
+
+  if (results.length > 0) {
+    return {
+      cleanliness: results[0].avgCleanliness,
+      accessibility: results[0].avgAccessibility,
+      facility: results[0].avgFacility,
+    };
+  } else {
+    return null;
+  }
+}
 
 const Restroom = mongoose.model("Restroom", restroomSchema);
 

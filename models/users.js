@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
   email: String,
   username: String,
   gender: String,   //female, male, non-binary,
-  hashedPassword: String,
+  password: String,
   reviews: [mongoose.Schema.Types.ObjectId],
 });
 

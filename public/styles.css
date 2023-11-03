@@ -2,6 +2,7 @@ body {
   background-color: #e1e1e1;
   margin: 0;
   padding: 0;
+  padding-bottom: 100px;
 }
 
 header {
@@ -13,9 +14,12 @@ header {
 }
 
 .header-content {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
 }
 
 footer {
@@ -67,4 +71,61 @@ footer {
 
 .start-button:hover {
   background-color: #34495e;
+}
+
+.header-link {
+  text-decoration: none;
+  color: white;
+  margin-bottom: 5px;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.center-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}
+
+.restroom-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.restroom-item {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 5px;
+  background-color: #fff;
+  width: calc(33.333% - 20px);
+  box-sizing: border-box;
+}
+
+.restroom-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+
+.restroom-info {
+  text-align: left;
+}
+
+.star-rating {
+  font-size: 20px;
+}
+
+.star {
+  display: inline-block;
+  color: #ccc; /* Default color for empty stars */
+}
+
+.filled {
+  color: #f5c518; /* Color for filled stars */
 }

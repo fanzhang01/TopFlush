@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Restroom = require('./restrooms');
 
 const reviewSchema = new mongoose.Schema({
   reviewerId: mongoose.Schema.Types.ObjectId,
@@ -36,6 +37,18 @@ reviewSchema.statics.addReview = async function (reviewData) {
 
   await newReview.save();
 
+  const avgRatingMetrics = await Restroom.calculateRatingMetrics(
+    reviewData.restroomId
+  );
+
+    //Update rating of restroom
+  if (avgRatingMetrics) {
+    await Restroom.findByIdAndUpdate(
+      reviewData.restroomId,
+      { ratingMetrics: avgRatingMetrics },
+      { new: true }
+    );
+  }
   return newReview;
 };
 

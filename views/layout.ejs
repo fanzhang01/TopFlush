@@ -8,10 +8,21 @@
 </head>
 <body>
     <header>
-        <div class="header-content">
-            <img src="/public/Icon.png" class="website-icon">
-            <h1 class="website-title">TopFlush</h1>
+    <div class="header-content">
+        <div class="center-content">
+        <img src="/public/Icon.png" class="website-icon" alt="Website Icon">
+        <h1 class="website-title">TopFlush</h1>
         </div>
+        <div class="header-buttons">
+            <% if (user && user.username) { %>
+            <span>Welcome, <%= user.username %> </span>
+            <a href="/logout" class="header-link">Logout</a>
+            <% } else { %>
+            <a href="/login" class="header-link">Log In/</a>
+            <a href="/register" class="header-link">Register</a>
+            <% } %>
+        </div>
+    </div>
     </header>
 
     <main class="sub-content">
@@ -20,6 +31,7 @@
 
     <footer>
         <div class="footer-content">
+            <a href="home" class="start-button">home</a>
             <p><a href="https://github.com/Tythla/TopFlush">CS555 Project</a></p>
         </div>
     </footer>

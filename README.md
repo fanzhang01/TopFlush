@@ -8,6 +8,53 @@
 - **Dynamic Updation**: Restrooms reported as unavailable by multiple users are automatically delisted, ensuring relevancy.
 - **Optimized Search**: Users can filter restrooms based on ratings or proximity for a personalized experience.
 
+## Database Structure
+
+### Topflush Database Overview
+
+Our application, TopFlush, aims to provide users with a convenient way to find nearby restrooms. We've chosen MongoDB as our NoSQL database for this project. Our data is organized into three primary collections: Users, Restrooms, and Reviews.
+
+#### **Users Collection**
+
+The Users Collection holds detailed information about each user, allowing them to personalize their data, log in, and submit reviews.
+
+| Name            | Type     | Description                                                  |
+|-----------------|----------|--------------------------------------------------------------|
+| _id             | Object   | Globally unique identifier to represent the user             |
+| Email           | String   | User's email (validated for format)                          |
+| Username        | String   | Chosen username                                              |
+| Gender          | Number   | 1 for Male, 0 for Female                                     |
+| Hashed password | String   | User's encrypted login password                              |
+| Reviews         | Array    | Contains the IDs of reviews the user has posted              |
+
+#### **Restrooms Collection**
+
+This collection comprises details about restrooms in Hoboken, capturing their locations, capacity, and more. It also provides specific metrics like availability, baby changing facilities, and sanitary product provision.
+
+| Name      | Type       | Description                                                                 |
+|-----------|------------|-----------------------------------------------------------------------------|
+| _id       | Object     | Unique identifier for the restroom                                          |
+| Location  | String     | Restroom location                                                           |
+| Capacity  | Number     | Maximum occupancy                                                           |
+| Reviews   | Array      | List of review IDs related to this restroom                                 |
+| Rating    | String     | Cumulative rating (from 1-5)                                                |
+| Metrics   | Subdocument| Object detailing various metrics like restroom availability and amenities    |
+
+#### **Reviews Collection**
+
+The Reviews Collection centralizes all the feedback submitted by users, detailing their experiences and ratings for specific restrooms.
+
+| Name       | Type       | Description                                                          |
+|------------|------------|----------------------------------------------------------------------|
+| _id        | Object     | Unique identifier for the review                                     |
+| ReviewerId | String     | ID of the user who provided the review                               |
+| RestroomId | String     | ID of the reviewed restroom                                          |
+| Text       | String     | Detailed content of the review                                       |
+| Rating     | Number     | Rating given by the user, ranging from 1 to 5                        |
+| Metrics    | Subdocument| Object encapsulating various metrics associated with the restroom     |
+
+---
+
 ## Setup & Usage
 
 ### Prerequisites
