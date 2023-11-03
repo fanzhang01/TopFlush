@@ -3,6 +3,7 @@ const session = require("express-session");
 const mongoose = require("mongoose");
 const expressLayouts = require("express-ejs-layouts");
 const bodyParser = require("body-parser");
+const session = require("express-session");
 
 const Restroom = require("./models/restrooms");
 const Review = require("./models/reviews");
@@ -12,6 +13,10 @@ const seedDB = require("./seed");
 const app = express();
 const url = "mongodb://127.0.0.1:27017/TopFlush";
 
+const authRoutes = require('./auth');
+
+app.use('/auth', authRoutes);
+
 app.set("view engine", "ejs");
 app.set("views", "views");
 
@@ -19,6 +24,22 @@ app.use("/public", express.static(__dirname + "/public"));
 app.use(expressLayouts);
 app.set("layout", "layout");
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// app.use(session({
+//   secret: 'your secret key',
+//   resave: false,
+//   saveUninitialized: true,
+//   cookie: { secure: true }
+// }));
+
+// let db;
+
+// MongoClient.connect(url)
+//   .then((client) => {
+//     db = client.db(dbName);
+//     const collection = db.collection("restrooms");
+//     collection
+//       .createIndex({ name: 1 }, { unique: true, background: true })
 
 mongoose
   .connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -67,6 +88,7 @@ app.use(async (req, res, next) => {
 });
 
 app.use((req, res, next) => {
+  res.locals.user = req.session.user;
   const titles = {
     "/": "TopFlush",
     "/home": "Home Page",
@@ -184,10 +206,26 @@ app.get("/restroom/:id", async (req, res) => {
 });
 
 app.get("/createRestroom", (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
   res.render("createRestroom");
 });
 
+app.get('/login', (req, res) => {
+  res.render('login');
+});
+
+app.get('/register', (req, res) => {
+  res.render('register');
+});
+
+
 app.post("/createRestroom", async (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
+  
   try {
     console.log("getting into router");
     const {
@@ -203,8 +241,9 @@ app.post("/createRestroom", async (req, res) => {
       accessibility,
       facility,
       text,
-      reviewerId,
     } = req.body;
+
+    const userId = req.session.user.id;
 
     const metrics = req.body.metrics;
 
@@ -253,7 +292,7 @@ app.post("/createRestroom", async (req, res) => {
 
     const reviewData = {
       restroomId,
-      reviewerId,
+      reviewerId: userId,
       text,
       metrics: {
         hasBabyChangingTable,
