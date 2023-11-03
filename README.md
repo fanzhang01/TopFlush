@@ -7,6 +7,18 @@
 - **Review Integration**: Users can evaluate restrooms on various metrics and even upload images to enhance their reviews.
 - **Dynamic Updation**: Restrooms reported as unavailable by multiple users are automatically delisted, ensuring relevancy.
 - **Optimized Search**: Users can filter restrooms based on ratings or proximity for a personalized experience.
+- **User Authentication**: Users can register for an account, log in, and have personalized experiences based on their account information.
+- **Submit Reviews**: Logged-in users can submit reviews for restrooms, sharing their experiences and ratings.
+- **Database Seeding**: The application seeds the database with sample data for testing purposes.
+- **Session Management**: User sessions are managed with cookies to keep users logged in as they navigate the application.
+
+## Technology Stack
+
+- **Express.js**: Web application framework for Node.js.
+- **Mongoose**: MongoDB object modeling tool for Node.js.
+- **EJS**: Templating engine for rendering views.
+- **express-session**: Middleware for session management.
+- **Body Parser**: Middleware for parsing incoming request bodies.
 
 ## Database Structure
 
