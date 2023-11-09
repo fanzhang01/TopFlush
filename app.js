@@ -24,22 +24,6 @@ app.use(expressLayouts);
 app.set("layout", "layout");
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// app.use(session({
-//   secret: 'your secret key',
-//   resave: false,
-//   saveUninitialized: true,
-//   cookie: { secure: true }
-// }));
-
-// let db;
-
-// MongoClient.connect(url)
-//   .then((client) => {
-//     db = client.db(dbName);
-//     const collection = db.collection("restrooms");
-//     collection
-//       .createIndex({ name: 1 }, { unique: true, background: true })
-
 mongoose
   .connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
@@ -66,8 +50,43 @@ app.use(
     secret: "justSomeRandomSecretString",
     resave: false,
     saveUninitialized: true,
+    cookie: { secure: false } 
   })
 );
+
+// !!! Don't remove this part, this is used to test ipgeolocation.
+// app.use(async (req, res, next) => {
+//   req.session.location = "Test Location, Test State, Test Country";
+//   console.log('Session after setting test location:', req.session);
+//   next();
+// });
+
+app.use(async (req, res, next) => {
+  try {
+    // !!! Don't remove this part. Will use the following code when the project is online. 
+    // const ip = req.connection.remoteAddress || req.socket.remoteAddress;
+    // const formattedIp = ip.includes('::ffff:') ? ip.split('::ffff:')[1] : ip;
+    // const location = await fetchLocation(formattedIp);
+
+    // !!! Don't remove this part, this is used to test ipgeolocation.
+    // $ curl https://api.ipgeolocation.io/ipgeo\?apiKey\=0747a801940b4186b2b5008978c849b9\&ip\=155.246.151.38
+    // {"ip":"155.246.151.38","continent_code":"NA","continent_name":"North America","country_code2":"US","country_code3":"USA","country_name":"United States","country_name_official":"United States of America","country_capital":"Washington, D.C.","state_prov":"New Jersey","state_code":"US-NJ","district":"","city":"Hoboken","zipcode":"07030","latitude":"40.74679","longitude":"-74.02503","is_eu":false,"calling_code":"+1","country_tld":".us","languages":"en-US,es-US,haw,fr","country_flag":"https://ipgeolocation.io/static/flags/us_64.png","geoname_id":"5096343","isp":"Stevens Institute of Technology","connection_type":"","organization":"Stevens Institute of Technology","currency":{"code":"USD","name":"US Dollar","symbol":"$"},"time_zone":{"name":"America/New_York","offset":-5,"offset_with_dst":-5,"current_time":"2023-11-09 17:31:13.483-0500","current_time_unix":1699569073.483,"is_dst":false,"dst_savings":0}}%   
+
+    const testIp = "155.246.151.38";
+    const location = await fetchLocation(testIp);
+
+    if (location) {
+      console.log(`Location fetched successfully: ${location}`);
+      req.session.location = location;
+      console.log('Session location set:', req.session.location); // Confirming session location
+    } else {
+      console.log("Failed to fetch location");
+    }
+  } catch (error) {
+    console.error('Error fetching location:', error);
+  }
+  next();
+});
 
 app.use(async (req, res, next) => {
   res.locals.user = res.locals.user || {};
@@ -110,10 +129,12 @@ app.get("/", async (req, res) => {
 
 app.get("/home", async (req, res) => {
   try {
+    console.log('Session data in /home:', req.session);
     const restroomsInNJ = await Restroom.find({ "location.state": "NJ" });
     res.render("home", {
       restrooms: restroomsInNJ,
-      username: req.session.username  // Pass the username to the template
+      username: req.session.username,
+      location: req.session.location
     });
   } catch (err) {
     console.error(err);
@@ -146,7 +167,7 @@ app.post("/login", async (req, res) => {
 
     if (user) {
       req.session.userId = user._id;
-      req.session.username = user.username;  // Store the username in the session
+      req.session.username = user.username;
       res.redirect("/home");
     } else {
       res.status(401).send("Invalid username or password");
@@ -171,9 +192,6 @@ app.post("/register", async (req, res) => {
       throw new Error("Two fields are not the same");
     }
     if (!username || !email || !password || !gender) {
-      /*return res.status(400).redirect('/register', {
-        error: 'All fields are required'
-      }); */
       throw new Error("All fields are required");
     } else {
       await user.save();
@@ -331,8 +349,8 @@ app.post("/createRestroom", async (req, res) => {
 
 app.get("/restrooms", async (req, res) => {
   try {
-    const restrooms = await Restroom.find(); // Query all entries from the restrooms collection
-    res.render("restrooms", { restrooms }); // Render the restrooms view with the queried data
+    const restrooms = await Restroom.find();
+    res.render("restrooms", { restrooms });
   } catch (err) {
     res.status(500).send(err.message);
   }
@@ -340,7 +358,7 @@ app.get("/restrooms", async (req, res) => {
 
 app.get("/profile", async (req, res) => {
   if (!req.session.userId) {
-    return res.redirect('/login'); // Redirect to login if not logged in
+    return res.redirect('/login');
   }
   try {
     const user = await User.findById(req.session.userId);
@@ -354,3 +372,21 @@ app.get("/profile", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+const fetchLocation = async (ip) => {
+  try {
+    // Here I used my apiKey
+    const response = await fetch(`https://api.ipgeolocation.io/ipgeo?apiKey=0747a801940b4186b2b5008978c849b9&ip=${ip}`);
+    const data = await response.json();
+    console.log(`API response for IP ${ip}:`, data);
+
+    const location = `${data.city}, ${data.state_prov}, ${data.country_name}`;
+    console.log(`Fetched location for IP ${ip}:`, location);
+    return location;
+  } catch (error) {
+    console.error('Error in fetchLocation:', error);
+    return null;
+  }
+};
+
+

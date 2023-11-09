@@ -11,8 +11,8 @@
         <a href="/profile">Profile</a>
     </div>
     <h1>Home</h1>
-    <% if (typeof username !== 'undefined' && username) { %>
-        <p>Welcome, <%= username %>!</p>
+    <% if (typeof username !== 'undefined' && username && typeof location !== 'undefined' && location) { %>
+        <p>Welcome, <%= username %>! You are now in <%= location %>.</p>
     <% } %>
     <p><a href="createRestroom">Create Restroom</a></p>
     <h2>Restrooms in NJ</h2>
