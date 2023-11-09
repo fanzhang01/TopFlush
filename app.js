@@ -333,3 +333,20 @@ app.get("/restrooms", async (req, res) => {
     res.status(500).send(err.message);
   }
 });
+
+app.get("/profile", async (req, res) => {
+  if (!req.session.userId) {
+    return res.redirect('/login'); // Redirect to login if not logged in
+  }
+  try {
+    const user = await User.findById(req.session.userId);
+    if (user) {
+      res.render("profile", { user: user });
+    } else {
+      res.redirect('/login');
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
