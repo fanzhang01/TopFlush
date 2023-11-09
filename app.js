@@ -227,7 +227,7 @@ app.get("/restroom/:id", async (req, res) => {
 });
 
 app.get("/createRestroom", (req, res) => {
-  if (!req.session.user) {
+  if (!req.session.userId) {
     return res.redirect('/login');
   }
   res.render("createRestroom");
@@ -243,7 +243,7 @@ app.get('/register', (req, res) => {
 
 
 app.post("/createRestroom", async (req, res) => {
-  if (!req.session.user) {
+  if (!req.session.userId) {
     return res.redirect('/login');
   }
   
