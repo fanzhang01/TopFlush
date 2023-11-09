@@ -3,7 +3,6 @@ const session = require("express-session");
 const mongoose = require("mongoose");
 const expressLayouts = require("express-ejs-layouts");
 const bodyParser = require("body-parser");
-const session = require("express-session");
 
 const Restroom = require("./models/restrooms");
 const Review = require("./models/reviews");
@@ -112,7 +111,10 @@ app.get("/", async (req, res) => {
 app.get("/home", async (req, res) => {
   try {
     const restroomsInNJ = await Restroom.find({ "location.state": "NJ" });
-    res.render("home", { restrooms: restroomsInNJ });
+    res.render("home", {
+      restrooms: restroomsInNJ,
+      username: req.session.username  // Pass the username to the template
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send("Internal Server Error");
@@ -144,6 +146,7 @@ app.post("/login", async (req, res) => {
 
     if (user) {
       req.session.userId = user._id;
+      req.session.username = user.username;  // Store the username in the session
       res.redirect("/home");
     } else {
       res.status(401).send("Invalid username or password");
