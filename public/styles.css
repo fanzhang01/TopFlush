@@ -134,3 +134,9 @@ footer {
 .filled {
   color: #f5c518; /* Color for filled stars */
 }
+
+.profile-content {
+  text-align: center;
+  margin: auto;
+  width: 50%; /* Adjust the width as needed */
+}
