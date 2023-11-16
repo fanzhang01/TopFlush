@@ -63,7 +63,7 @@
             <% } %>
         </div>
     </p>
-    <form action="/restroom/<%= restroom.restroomId %>/review" method="POST" class="review-form">
+    <form action="/restroom/<%= restroom.restroomId %>/review" method="POST" class="review-form" required>
         <label for="text">review</label>
         <textarea name="text" id="text" rows="4" cols="50" required></textarea>
         <br>
