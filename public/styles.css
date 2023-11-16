@@ -32,9 +32,14 @@ footer {
 }
 
 .footer-content {
-  display: inline-flex;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.footer-project-link {
+  margin-top: 10px; /* Adds some space above the CS555 Project link */
 }
 
 .website-icon {
@@ -54,7 +59,7 @@ footer {
 
 .start-button {
   display: block;
-  margin: auto;
+  margin: 10px auto;
   padding: 10px 20px;
   font-size: 16px;
   font-weight: bold;
