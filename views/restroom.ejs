@@ -61,6 +61,41 @@
             <% } %>
         </div>
     </p>
+    <form action="/restroom/<%= restroom.restroomId %>/review" method="POST">
+        <label for="text">review</label>
+        <textarea name="text" id="text" rows="4" cols="50" required></textarea>
+        <br>
+        <label for="rating">rating</label>
+        <input type="number" name="rating" id="rating" min="1" max="5" required>
+        <br>
+        <h3>ratingMetrics</h3>
+        <label for="cleanliness">cleanliness</label>
+        <input type="number" name="ratingMetrics.cleanliness" id="cleanliness" min="1" max="5" required>
+        <br>
+        <label for="accessibility">accessibility</label>
+        <input type="number" name="ratingMetrics.accessibility" id="accessibility" min="1" max="5" required>
+        <br>
+        <label for="facility">facility</label>
+        <input type="number" name="ratingMetrics.facility" id="facility" min="1" max="5" required>
+        <br>
+        <h3>metrics</h3>
+        <label for="isOpen">isOpen</label>
+        <input type="checkbox" name="metrics.isOpen" id="isOpen">
+        <br>
+        <label for="hasBabyChangingTable">hasBabyChangingTable</label>
+        <input type="checkbox" name="metrics.hasBabyChangingTable" id="hasBabyChangingTable">
+        <br>
+        <label for="providesSanitaryProducts">providesSanitaryProducts</label>
+        <input type="checkbox" name="metrics.providesSanitaryProducts" id="providesSanitaryProducts">
+        <br>
+        <label for="customerOnly">customerOnly</label>
+        <input type="checkbox" name="metrics.customerOnly" id="customerOnly">
+        <br>
+        <label for="dryer">dryer</label>
+        <input type="checkbox" name="metrics.dryer" id="dryer">
+        <br>
+        <button type="submit">submit</button>
+      </form>
     <p><strong>Image:</strong>
         <div class="star-rating">
             <img src="<%= restroom.pathToImage %>" alt="" srcset="">
