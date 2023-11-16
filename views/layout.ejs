@@ -14,8 +14,8 @@
         <h1 class="website-title">TopFlush</h1>
         </div>
         <div class="header-buttons">
-            <% if (user && user.username) { %>
-            <span>Welcome, <%= user.username %> </span>
+            <% if (typeof username !== 'undefined' && username) { %>
+            <span>Welcome, <%= username %> </span>
             <a href="/logout" class="header-link">Logout</a>
             <% } else { %>
             <a href="/login" class="header-link">Log In/</a>
