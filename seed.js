@@ -25,6 +25,7 @@ async function seedDB() {
         customerOnly: false,
         dryer: true,
       },
+      pathToImage: "/public/storage/229.jpeg",
     },
     {
       location: {
@@ -46,6 +47,7 @@ async function seedDB() {
         customerOnly: false,
         dryer: true,
       },
+      pathToImage: "/public/storage/ucc.jpeg",
     },
     {
       location: {
@@ -67,6 +69,7 @@ async function seedDB() {
         customerOnly: true,
         dryer: true,
       },
+      pathToImage: "/public/storage/4901.jpeg",
     },
   ];
 
