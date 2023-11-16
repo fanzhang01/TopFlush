@@ -1,5 +1,5 @@
 <h1>Create Restroom</h1>
-<form action="/createRestroom" method="POST">
+<form action="/createRestroom" method="POST" enctype="multipart/form-data>
     <!-- Location -->
     <label for="address">Address*:</label><br>
     <input type="text" id="address" name="location[address]" required><br>
@@ -93,7 +93,10 @@
     <input type="range" id="facility" name="ratingMetrics[facility]" min="1" max="5" required><br>
 
     <label for="text">Review</label><br>
-    <input type="text" id="text" name="text" size="50">
+    <input type="text" id="text" name="text" size="50"><br><br>
+
+    <label for="reviewImage">Upload Images</label><br>
+    <input type="file" id="reviewImage" name="reviewImage" multiple>
 
     <p>* are required</p><br>
     <!-- submit and backbutton on one row with same size -->
