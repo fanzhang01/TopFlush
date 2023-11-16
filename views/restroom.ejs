@@ -5,6 +5,8 @@
     <title><%= restroom.location.address %></title>
     <link rel="icon" type="image/x-icon" href="/public/Icon.png">
     <link rel="stylesheet" type="text/css" href="/public/styles.css">
+    <link rel="stylesheet" type="text/css" href="/public/styleOfPostReview">
+
 </head>
 <body>
     <h1><%= restroom.location.address %></h1>
@@ -61,7 +63,7 @@
             <% } %>
         </div>
     </p>
-    <form action="/restroom/<%= restroom.restroomId %>/review" method="POST">
+    <form action="/restroom/<%= restroom.restroomId %>/review" method="POST" class="review-form">
         <label for="text">review</label>
         <textarea name="text" id="text" rows="4" cols="50" required></textarea>
         <br>
