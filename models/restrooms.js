@@ -15,7 +15,7 @@ const restroomSchema = new mongoose.Schema({
     default: null,
   },
   reviews: {
-    type: [mongoose.Schema.Types.ObjectId],
+    type: [{ type: mongoose.Schema.Types.ObjectId }],
     default: [],
   },
   rating: {

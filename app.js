@@ -221,6 +221,18 @@ app.get("/restroom/:id", async (req, res) => {
     res.status(500).send(err.message);
   }
 });
+/*
+app.post("/restroom/:id/review",async(req,res)=>{
+  if (!req.session.userId) {
+    return res.redirect('/login');
+  }
+  try{
+    let userId = req.session.userId;
+  }catch (err) {
+    res.status(500).send(err.message);
+  }
+})
+*/
 
 app.get("/createRestroom", (req, res) => {
   if (!req.session.userId) {
