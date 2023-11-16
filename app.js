@@ -3,6 +3,8 @@ const session = require("express-session");
 const mongoose = require("mongoose");
 const expressLayouts = require("express-ejs-layouts");
 const bodyParser = require("body-parser");
+const multer = require("multer");
+const fs = require("fs");
 
 const Restroom = require("./models/restrooms");
 const Review = require("./models/reviews");
@@ -53,6 +55,22 @@ app.use(
     cookie: { secure: false } 
   })
 );
+
+const storageConfig = multer.diskStorage({
+  destination: function (req, file, cb) {
+    
+    let userId = req.session.userId;
+    let tempFilePath = "public/storage/" + userId;
+    req.body.tempFilePath = tempFilePath;
+    fs.mkdirSync(tempFilePath, { recursive: true });
+    cb(null, tempFilePath);
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+
+let upload = multer({ storage: storageConfig });
 
 // !!! Don't remove this part, this is used to test ipgeolocation.
 // app.use(async (req, res, next) => {
@@ -229,16 +247,10 @@ app.get("/createRestroom", (req, res) => {
   res.render("createRestroom");
 });
 
-app.get('/login', (req, res) => {
-  res.render('login');
-});
+app.post("/createRestroom", upload.single("reviewImage"), async (req, res) => {
 
-app.get('/register', (req, res) => {
-  res.render('register');
-});
+  console.log("req.file: ", req.file);
 
-
-app.post("/createRestroom", async (req, res) => {
   if (!req.session.userId) {
     return res.redirect('/login');
   }
@@ -258,9 +270,10 @@ app.post("/createRestroom", async (req, res) => {
       accessibility,
       facility,
       text,
+      tempFilePath
     } = req.body;
 
-    const userId = req.session.user.id;
+    const userId = req?.session?.userId;
 
     const metrics = req.body.metrics;
 
@@ -299,6 +312,7 @@ app.post("/createRestroom", async (req, res) => {
         customerOnly: req.body.metrics.customerOnly,
         dryer: req.body.metrics.dryer,
       },
+      pathToImage: req.body.tempFilePath
     };
 
     console.log("restroomData:", restroomData);
