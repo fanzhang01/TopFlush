@@ -239,18 +239,31 @@ app.get("/restroom/:id", async (req, res) => {
     res.status(500).send(err.message);
   }
 });
-/*
+
 app.post("/restroom/:id/review",async(req,res)=>{
   if (!req.session.userId) {
     return res.redirect('/login');
   }
   try{
-    let userId = req.session.userId;
+    const userId = req.session.userId;
+    const restroomId = req.params.id;
+    const { text, rating, ratingMetrics, metrics } = req.body;
+
+    await Review.createReview({
+      reviewerId: userId,
+      restroomId: restroomId,
+      userId: userId,
+      text: text,
+      rating: rating,
+      ratingMetrics: ratingMetrics,
+      metrics: metrics
+    });
+
+    res.redirect(`/restroom/${restroomId}`);
   }catch (err) {
     res.status(500).send(err.message);
   }
 })
-*/
 
 app.get("/createRestroom", (req, res) => {
   if (!req.session.userId) {
