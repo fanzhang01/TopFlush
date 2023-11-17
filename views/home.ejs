@@ -5,6 +5,7 @@
     <title>Home</title>
     <link rel="icon" type="image/x-icon" href="/public/Icon.png">
     <link rel="stylesheet" type="text/css" href="/public/styles.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHqfPgHzkC2REof5lJQKFoPaAadhDdP84&callback=initMap" async defer></script>
 </head>
 <body>
     <div style="text-align: right;">
@@ -39,6 +40,41 @@
             </li>
         <% }); %>
     </ul>
+    <h2>Restrooms Nearby</h2>
+    <div id="map" style="height: 320px; width: 80%;"></div>
+
+    <!-- Initialize Google Maps and Add Markers -->
+    <script>
+        let map;
+        let restrooms = <%- JSON.stringify(restrooms) %>;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 40.7448, lng: -74.0256 }, // Default center (e.g., New York City)
+                zoom: 16
+            });
+
+            restrooms.forEach(function(restroom) {
+                let marker = new google.maps.Marker({
+                    position: { 
+                        lat: restroom.location.coordinates.latitude, 
+                        lng: restroom.location.coordinates.longitude 
+                    },
+                    map: map,
+                    title: restroom.location.address
+                });
+
+                // Optionally add an info window for each marker
+                let infowindow = new google.maps.InfoWindow({
+                    content: `<div><strong>${restroom.location.address}</strong></div>`
+                });
+
+                marker.addListener('click', function() {
+                    infowindow.open(map, marker);
+                });
+            });
+        }
+    </script>
 </body>
 </html>
 
