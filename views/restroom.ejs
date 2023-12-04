@@ -9,6 +9,11 @@
 </head>
 <body>
     <h1><%= restroom.location.address %></h1>
+    <p>
+        <div class="star-rating">
+            <img src="<%= restroom.pathToImage %>" alt="" srcset="" width="500" height="400">
+        </div>
+    </p>
     <p><strong>City:</strong> <%= restroom.location.city %></p>
     <p><strong>Baby Changing Table:</strong> <%= restroom.metrics.hasBabyChangingTable ? 'Yes' : 'No' %></p>
     <p><strong>Sanitary Products Available:</strong> <%= restroom.metrics.providesSanitaryProducts ? 'Yes' : 'No' %></p>
@@ -69,7 +74,7 @@
         <label for="rating">rating</label>
         <input type="number" name="rating" id="rating" min="1" max="5" required>
         <br>
-        <h3>ratingMetrics</h3>
+        <h3>Rating Metrics</h3>
         <label for="cleanliness">cleanliness</label>
         <input type="number" name="ratingMetrics.cleanliness" id="cleanliness" min="1" max="5" required>
         <br>
@@ -79,7 +84,7 @@
         <label for="facility">facility</label>
         <input type="number" name="ratingMetrics.facility" id="facility" min="1" max="5" required>
         <br>
-        <h3>metrics</h3>
+        <h3>Metrics</h3>
         <label for="isOpen">isOpen</label>
         <input type="checkbox" name="metrics.isOpen" id="isOpen">
         <br>
@@ -97,10 +102,6 @@
         <br>
         <button type="submit">submit</button>
       </form>
-    <p><strong>Image:</strong>
-        <div class="star-rating">
-            <img src="<%= restroom.pathToImage %>" alt="" srcset="" width="500" height="400">
-        </div>
-    </p>
+    
 </body>
 </html>
