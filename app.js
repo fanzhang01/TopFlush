@@ -61,7 +61,7 @@ const storageConfig = multer.diskStorage({
     
     let userId = req.session.userId;
     let tempFilePath = "public/storage/" + userId;
-    req.body.tempFilePath = tempFilePath;
+    req.body.tempFilePath = "/" + tempFilePath + "/" + file.originalname;
     fs.mkdirSync(tempFilePath, { recursive: true });
     cb(null, tempFilePath);
   },
@@ -301,12 +301,12 @@ app.post("/createRestroom", upload.single("reviewImage"), async (req, res) => {
     const restroomData = {
       location: {
         address: location.address,
-        latitude: parseFloat(location.latitude),
-        longitude: parseFloat(location.longitude),
+        latitude: parseFloat(location?.latitude || 0.0),
+        longitude: parseFloat(location?.longitude || 0.0),
         city: location.city,
         state: location.state,
       },
-      capacity: parseInt(capacity, 10),
+      capacity: parseInt(capacity, 10 || 0.0),
       rating,
       ratingMetrics: {
         cleanliness: parseFloat(ratingMetrics.cleanliness),
@@ -314,7 +314,7 @@ app.post("/createRestroom", upload.single("reviewImage"), async (req, res) => {
         facility: parseFloat(ratingMetrics.facility),
       },
       metrics,
-      pathToImage: req.file ? req.file.path : null // Assuming 'req.file.path' contains the path to the uploaded image
+      pathToImage: req.body.tempFilePath //? req.file.path : null // Assuming 'req.file.path' contains the path to the uploaded image
     };
 
     console.log("restroomData:", restroomData);

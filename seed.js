@@ -10,6 +10,8 @@ async function seedDB() {
         address: "229 Washington St",
         city: "Hoboken",
         state: "NJ",
+        latitude: 0,
+        longitude: 0
       },
       capacity: 3,
       rating: 4,
@@ -32,6 +34,8 @@ async function seedDB() {
         address: "UCC University Towers",
         city: "Hoboken",
         state: "NJ",
+        latitude: 0,
+        longitude: 0,
       },
       capacity: 6,
       rating: 5,
@@ -54,6 +58,8 @@ async function seedDB() {
         address: "4901 Bergenline Ave",
         city: "West New York",
         state: "NJ",
+        latitude: 0,
+        longitude: 0
       },
       capacity: 3,
       rating: 3,
