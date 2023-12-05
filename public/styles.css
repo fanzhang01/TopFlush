@@ -11,6 +11,7 @@ header {
   padding: 20px 0;
   position: fixed;
   width: 100%;
+  z-index: 1;
 }
 
 .header-content {
@@ -38,7 +39,7 @@ footer {
   justify-content: center;
 }
 
-.footer-project-link {
+.footer-copyright {
   margin-top: 10px; /* Adds some space above the CS555 Project link */
 }
 
@@ -163,9 +164,11 @@ footer {
   display: flex;
   gap: 1rem;
   color: rgb(44, 33, 33);
-  margin-bottom: 10px;
-  justify-content: flex-end;
-  padding-right: 20px;
+  /*margin-bottom: 10px; */
+  font-size: 14px;
+  margin-left: 10px;
+  /* justify-content: flex-end;
+  padding-right: 20px; */
 }
 
 /* .login {
