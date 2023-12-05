@@ -68,39 +68,39 @@
         </div>
     </p>
     <form action="/restroom/<%= restroom.restroomId %>/review" method="POST" required>
-        <label for="text">review</label>
+        <label for="text">Review:</label>
         <textarea name="text" id="text" rows="4" cols="50" required></textarea>
         <br>
-        <label for="rating">rating</label>
+        <label for="rating">Rating:</label>
         <input type="number" name="rating" id="rating" min="1" max="5" required>
         <br>
         <h3>Rating Metrics</h3>
-        <label for="cleanliness">cleanliness</label>
+        <label for="cleanliness">Cleanliness:</label>
         <input type="number" name="ratingMetrics.cleanliness" id="cleanliness" min="1" max="5" required>
         <br>
-        <label for="accessibility">accessibility</label>
+        <label for="accessibility">Accessibility:</label>
         <input type="number" name="ratingMetrics.accessibility" id="accessibility" min="1" max="5" required>
         <br>
-        <label for="facility">facility</label>
+        <label for="facility">Facility:</label>
         <input type="number" name="ratingMetrics.facility" id="facility" min="1" max="5" required>
         <br>
         <h3>Metrics</h3>
-        <label for="isOpen">isOpen</label>
+        <label for="isOpen">Is open</label>
         <input type="checkbox" name="metrics.isOpen" id="isOpen">
         <br>
-        <label for="hasBabyChangingTable">hasBabyChangingTable</label>
+        <label for="hasBabyChangingTable">Has baby changing table</label>
         <input type="checkbox" name="metrics.hasBabyChangingTable" id="hasBabyChangingTable">
         <br>
-        <label for="providesSanitaryProducts">providesSanitaryProducts</label>
+        <label for="providesSanitaryProducts">Provides sanitary products</label>
         <input type="checkbox" name="metrics.providesSanitaryProducts" id="providesSanitaryProducts">
         <br>
-        <label for="customerOnly">customerOnly</label>
+        <label for="customerOnly">Customer only</label>
         <input type="checkbox" name="metrics.customerOnly" id="customerOnly">
         <br>
-        <label for="dryer">dryer</label>
+        <label for="dryer">Dryer</label>
         <input type="checkbox" name="metrics.dryer" id="dryer">
-        <br>
-        <button type="submit">submit</button>
+        <br><br>
+        <button type="submit" class="register-button">Submit</button>
       </form>
     
 </body>
