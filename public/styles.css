@@ -107,6 +107,18 @@ footer {
   margin-right: 10px;
 }
 
+.restroom-link {
+  /* Resetting styles to default values */
+  color: inherit;
+  text-decoration: none; /* or 'none' if you want to remove underlines */
+
+}
+
+.index {
+  margin: auto;
+  width: max-content;
+}
+
 .welcome-content {
   display: flex;
   gap: 1rem;

@@ -20,10 +20,10 @@
     <ul class="restroom-list">
         <% restrooms.forEach(function(restroom) { %>
             <li class="restroom-item">
-                <a href="/restroom/<%= restroom._id %>">
-                    <img src="<%= restroom.image %>" alt="Restroom" class="restroom-image">
-                </a>
+                <a href="/restroom/<%= restroom._id %>" class="restroom-link">
+                
                 <div class="restroom-info">
+                    <img src="<%= restroom.image %>" alt="Restroom" class="restroom-image"><br>
                     <strong>Address:</strong> <%= restroom.location.address %><br>
                     <strong>City:</strong> <%= restroom.location.city %><br>
                     <strong>Rating:</strong> 
@@ -37,6 +37,7 @@
                         <% } %>
                     </div>
                 </div>
+            </a>
             </li>
         <% }); %>
     </ul>
