@@ -230,7 +230,7 @@ app.get("/restroom/:id", async (req, res) => {
     const restroom = await Restroom.findById(restroomId);
     if (restroom) {
       console.log(restroom);
-      res.render("restroom", { restroom });
+      res.render("restroom", { restroom,username: req.session.username });
     } else {
       // If no restroom is found, send a 404 response with the message "Restroom not found" and its id
       res.status(404).send(`Restroom not found with id ${restroomId}`);
@@ -368,7 +368,7 @@ app.get("/profile", async (req, res) => {
   try {
     const user = await User.findById(req.session.userId);
     if (user) {
-      res.render("profile", { user: user });
+      res.render("profile", { user: user,username: req.session.username });
     } else {
       res.redirect('/login');
     }
