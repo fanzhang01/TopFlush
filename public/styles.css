@@ -11,6 +11,7 @@ header {
   padding: 20px 0;
   position: fixed;
   width: 100%;
+  z-index: 1;
 }
 
 .header-content {
@@ -18,8 +19,8 @@ header {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  max-width: 1200px;
-  margin: auto;
+  /* max-width: 1200px; */
+  /* margin: auto; */
 }
 
 footer {
@@ -38,7 +39,7 @@ footer {
   justify-content: center;
 }
 
-.footer-project-link {
+.footer-copyright {
   margin-top: 10px; /* Adds some space above the CS555 Project link */
 }
 
@@ -50,6 +51,7 @@ footer {
 
 .website-title {
   margin: 0;
+  color: rgb(44, 33, 33);
 }
 
 .sub-content {
@@ -84,13 +86,107 @@ footer {
   margin-bottom: 5px;
   flex-direction: column;
   align-items: flex-end;
+  
 }
+
+.login,
+.register {
+  padding: 10px;
+  display: inline-block; 
+  text-align: center; 
+  text-decoration: none;
+  color: #fff;
+}
+
+.login {
+  background: #907676;
+}
+
+.register {
+  /* background: #fff;
+  color: rgb(44, 33, 33); */
+  margin-right: 10px; 
+  display: inline-block; 
+  padding: 8px 15px; 
+  text-align: center; 
+  text-decoration: none; 
+  border: 1px solid #ccc; 
+  border-radius: 3px; 
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #2c3e50;
+  border: none;
+  border-radius: 3px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.restroom-link {
+  color: inherit;
+  text-decoration: none; 
+
+}
+
+.register-button {
+  display: inline-block; 
+  padding: 8px 15px; 
+  text-align: center; 
+  text-decoration: none; 
+  border: 1px solid #ccc; 
+  border-radius: 3px; 
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #2c3e50;
+  border: none;
+  border-radius: 3px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.register-button:hover {
+  background-color: #34495e;
+}
+
+.register-button p {
+  margin: 0; /* Remove default paragraph margin */
+}
+
+.index {
+  margin: auto;
+  width: max-content;
+}
+
+.welcome-content {
+  display: flex;
+  gap: 1rem;
+  color: rgb(44, 33, 33);
+  /*margin-bottom: 10px; */
+  font-size: 14px;
+  margin-left: 10px;
+  /* justify-content: flex-end;
+  padding-right: 20px; */
+}
+
+/* .login {
+  background: #907676;
+  color: #fff;
+  padding: 20%;
+}
+.register {
+  background: #fff;
+  color: #907676;
+  padding: 20%;
+} */
 
 .center-content {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: auto;
+  /* margin: auto; */
 }
 
 .restroom-list {
@@ -98,12 +194,13 @@ footer {
   padding: 0;
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .restroom-item {
   border: 1px solid #ccc;
   padding: 10px;
-  margin: 10px;
+  /*margin: 10px; */
   border-radius: 5px;
   background-color: #fff;
   width: calc(33.333% - 20px);

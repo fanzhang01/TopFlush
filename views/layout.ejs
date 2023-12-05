@@ -15,11 +15,20 @@
         </div>
         <div class="header-buttons">
             <% if (typeof username !== 'undefined' && username) { %>
-            <span>Welcome, <%= username %> </span>
-            <a href="/logout" class="header-link">Logout</a>
+                <div>
+                    <div class="welcome-content">
+                        <b>Welcome, <%= username %></b>
+                    </div>
+                    <div>
+                        <a href="/profile" class="header-link login"><b>Profile</b></a>
+                        <a href="/logout" class="header-link register"><b>Logout</b></a>
+                    </div>
+                </div>
+            <!-- <span>Welcome, <%= username %> </span>
+            <a href="/logout" class="header-link">Logout</a> -->
             <% } else { %>
-            <a href="/login" class="header-link">Log In/</a>
-            <a href="/register" class="header-link">Register</a>
+            <a href="/login" class="header-link login"><b>Log In</b></a>
+            <a href="/register" class="header-link register"><b>Register</b></a>
             <% } %>
         </div>
     </div>
@@ -31,11 +40,11 @@
 
     <footer>
         <div class="footer-content">
-            <div class="footer-home">
-                <a href="/home" class="start-button">Home</a>
+            <div>
+                <a href="https://github.com/Tythla/TopFlush" class="start-button" target="_blank">Github</a>
             </div>
-            <div class="footer-project-link">
-                <a href="https://github.com/Tythla/TopFlush">CS555 Project</a>
+            <div class="footer-copyright">
+                &copy; 2023 Top Flush. All Rights Reserved.
             </div>
         </div>
     </footer>
