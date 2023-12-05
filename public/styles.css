@@ -90,12 +90,11 @@ footer {
 
 .login,
 .register {
-  padding: 10px; /* Adjust the padding as needed */
-  display: inline-block; /* Make login and register appear on the same line */
-  text-align: center; /* Center the text within the login and register elements */
+  padding: 10px;
+  display: inline-block; 
+  text-align: center; 
   text-decoration: none;
   color: #fff;
-  margin-right: 10px; /* Add some space between the login and register links */
 }
 
 .login {
@@ -105,6 +104,16 @@ footer {
 .register {
   background: #fff;
   color: rgb(44, 33, 33);
+  margin-right: 10px;
+}
+
+.welcome-content {
+  display: flex;
+  gap: 1rem;
+  color: rgb(44, 33, 33);
+  margin-bottom: 10px;
+  justify-content: flex-end;
+  padding-right: 20px;
 }
 
 /* .login {
