@@ -105,12 +105,12 @@ footer {
   /* background: #fff;
   color: rgb(44, 33, 33); */
   margin-right: 10px; 
-  display: inline-block; /* or use 'inline' if you want it to be inline without a line break */
-  padding: 8px 15px; /* Adjust padding to control button size */
-  text-align: center; /* Optional: Center the text horizontally */
-  text-decoration: none; /* Optional: Remove underlines from links */
-  border: 1px solid #ccc; /* Optional: Add a border */
-  border-radius: 3px; /* Optional: Add rounded corners */
+  display: inline-block; 
+  padding: 8px 15px; 
+  text-align: center; 
+  text-decoration: none; 
+  border: 1px solid #ccc; 
+  border-radius: 3px; 
   font-size: 14px;
   font-weight: bold;
   color: #fff;
@@ -123,19 +123,18 @@ footer {
 }
 
 .restroom-link {
-  /* Resetting styles to default values */
   color: inherit;
-  text-decoration: none; /* or 'none' if you want to remove underlines */
+  text-decoration: none; 
 
 }
 
 .register-button {
-  display: inline-block; /* or use 'inline' if you want it to be inline without a line break */
-  padding: 8px 15px; /* Adjust padding to control button size */
-  text-align: center; /* Optional: Center the text horizontally */
-  text-decoration: none; /* Optional: Remove underlines from links */
-  border: 1px solid #ccc; /* Optional: Add a border */
-  border-radius: 3px; /* Optional: Add rounded corners */
+  display: inline-block; 
+  padding: 8px 15px; 
+  text-align: center; 
+  text-decoration: none; 
+  border: 1px solid #ccc; 
+  border-radius: 3px; 
   font-size: 14px;
   font-weight: bold;
   color: #fff;
