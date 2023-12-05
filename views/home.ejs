@@ -15,7 +15,7 @@
     <% if (typeof username !== 'undefined' && username && typeof location !== 'undefined' && location) { %>
         <p>Welcome, <%= username %>! You are now in <%= location %>.</p>
     <% } %>
-    <p><a href="createRestroom">Create Restroom</a></p>
+    <p><a href="createRestroom" class="register-button">Create Restroom</a></p>
     <h2>Restrooms in NJ</h2>
     <ul class="restroom-list">
         <% restrooms.forEach(function(restroom) { %>
@@ -23,7 +23,7 @@
                 <a href="/restroom/<%= restroom._id %>" class="restroom-link">
                 
                 <div class="restroom-info">
-                    <img src="<%= restroom.image %>" alt="Restroom" class="restroom-image"><br>
+                    <img src="<%= restroom.pathToImage %>" alt="Restroom" class="restroom-image"><br>
                     <strong>Address:</strong> <%= restroom.location.address %><br>
                     <strong>City:</strong> <%= restroom.location.city %><br>
                     <strong>Rating:</strong> 

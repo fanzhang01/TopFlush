@@ -191,12 +191,13 @@ footer {
   padding: 0;
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .restroom-item {
   border: 1px solid #ccc;
   padding: 10px;
-  margin: 10px;
+  /*margin: 10px; */
   border-radius: 5px;
   background-color: #fff;
   width: calc(33.333% - 20px);
