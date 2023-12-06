@@ -248,8 +248,9 @@ app.post("/restroom/:id/review",async(req,res)=>{
   try{
     const userId = req.session.userId;
     const restroomId = req.params.id;
-    const { text, rating, ratingMetrics, metrics } = req.body;
-
+    const { text, rating, cleanliness, accessibility, facility, isOpen, hasBabyChangingTable, providesSanitaryProducts, customerOnly, dryer } = req.body;
+    const ratingMetrics = { cleanliness, accessibility, facility };
+    const metrics = { isOpen, hasBabyChangingTable, providesSanitaryProducts, customerOnly, dryer };
     await Review.addReview({
       reviewerId: userId,
       restroomId: restroomId,
