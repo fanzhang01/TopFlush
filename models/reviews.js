@@ -2,8 +2,16 @@ const mongoose = require("mongoose");
 const Restroom = require('./restrooms');
 
 const reviewSchema = new mongoose.Schema({
-  restroomId: mongoose.Schema.Types.ObjectId,
-  userId:mongoose.Schema.Types.ObjectId,
+  restroomId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'restrooms',
+    required: true
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'users',
+    required: true
+  },
   text: String,
   rating: Number,
   ratingMetrics: {
@@ -21,8 +29,11 @@ const reviewSchema = new mongoose.Schema({
 });
 
 reviewSchema.statics.addReview = async function (reviewData) {
-  const { reviewerId, restroomId, ratingMetrics } = reviewData;
+  const newReview = new Review(reviewData);
+  await newReview.save();
+  //const { reviewerId, restroomId, ratingMetrics } = reviewData;
 
+  /*
   if (!reviewerId || !restroomId || !ratingMetrics) {
     throw new Error("Required fields are missing");
   }
@@ -32,10 +43,10 @@ reviewSchema.statics.addReview = async function (reviewData) {
   if (existingReview) {
     throw new Error("This user's review for this restroom already exists.");
   }
+  */
+  //const newReview = new this(reviewData);
 
-  const newReview = new this(reviewData);
-
-  await newReview.save();
+  //await newReview.save();
 
   const avgRatingMetrics = await Restroom.calculateRatingMetrics(
     reviewData.restroomId

@@ -252,7 +252,6 @@ app.post("/restroom/:id/review",async(req,res)=>{
     const ratingMetrics = { cleanliness, accessibility, facility };
     const metrics = { isOpen, hasBabyChangingTable, providesSanitaryProducts, customerOnly, dryer };
     await Review.addReview({
-      reviewerId: userId,
       restroomId: restroomId,
       userId: userId,
       text: text,
