@@ -67,22 +67,23 @@
             <% } %>
         </div>
     </p>
+    <div class="form-container">
     <form action="/restroom/<%= restroomId %>/review" method="POST" required>
         <label for="text">Review:</label>
         <textarea name="text" id="text" rows="4" cols="50" required></textarea>
         <br>
-        <label for="rating">Rating:</label>
-        <input type="number" name="rating" id="rating" min="1" max="5" required>
+        <label for="rating">Rating (1-5)*:</label>
+        <input type="range" name="rating" id="rating" min="1" max="5" required>
         <br>
         <h3>Rating Metrics</h3>
-        <label for="cleanliness">Cleanliness:</label>
-        <input type="number" name="cleanliness" id="cleanliness" min="1" max="5" required>
-        <br>
-        <label for="accessibility">Accessibility:</label>
-        <input type="number" name="accessibility" id="accessibility" min="1" max="5" required>
-        <br>
-        <label for="facility">Facility:</label>
-        <input type="number" name="facility" id="facility" min="1" max="5" required>
+        <label for="cleanliness">Cleanliness Rating (1-5)*:</label><br>
+        <input type="range" id="cleanliness" name="ratingMetrics[cleanliness]" min="1" max="5" required><br>
+
+        <label for="accessibility">Accessibility Rating (1-5)*:</label><br>
+        <input type="range" id="accessibility" name="ratingMetrics[accessibility]" min="1" max="5" required><br>
+
+        <label for="facility">Facility Rating (1-5)*:</label><br>
+        <input type="range" id="facility" name="ratingMetrics[facility]" min="1" max="5" required><br><br>
         <br>
         <h3>Metrics</h3>
         <label for="isOpen">Is open</label>
@@ -102,7 +103,7 @@
         <br><br>
         <button type="submit" class="register-button">Submit</button>
         <input type="button" value="Back" onclick="window.location.href='/home'" class="register-button">
-      </form>
-    
+    </form>
+    </div>
 </body>
 </html>

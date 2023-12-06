@@ -237,3 +237,10 @@ footer {
   margin: auto;
   width: 50%; /* Adjust the width as needed */
 }
+
+.form-container {
+  position: absolute;
+  top:250px;
+  right: 0;
+  width: 33%;
+}
