@@ -5,68 +5,115 @@
     <title><%= restroom.location.address %></title>
     <link rel="icon" type="image/x-icon" href="/public/Icon.png">
     <link rel="stylesheet" type="text/css" href="/public/styles.css">
+    
 </head>
 <body>
-    <div class="restroom-details">
-        <h1><%= restroom.location.address %></h1>
-        <p><strong>City:</strong> <%= restroom.location.city %></p>
-        <p><strong>Baby Changing Table:</strong> <%= restroom.metrics.hasBabyChangingTable ? 'Yes' : 'No' %></p>
-        <p><strong>Sanitary Products Available:</strong> <%= restroom.metrics.providesSanitaryProducts ? 'Yes' : 'No' %></p>
-        <p><strong>Customers Only:</strong> <%= restroom.metrics.customerOnly ? 'Yes' : 'No' %></p>
-        <p><strong>Dryer Available:</strong> <%= restroom.metrics.dryer ? 'Yes' : 'No' %></p>
+    <h1><%= restroom.location.address %></h1>
+    <p>
+        <div class="star-rating">
+            <img src="<%= restroom.pathToImage %>" alt="" srcset="" width="500" height="400">
+        </div>
+    </p>
+    <p><strong>City:</strong> <%= restroom.location.city %></p>
+    <p><strong>Baby Changing Table:</strong> <%= restroom.metrics.hasBabyChangingTable ? 'Yes' : 'No' %></p>
+    <p><strong>Sanitary Products Available:</strong> <%= restroom.metrics.providesSanitaryProducts ? 'Yes' : 'No' %></p>
+    <p><strong>Customers Only:</strong> <%= restroom.metrics.customerOnly ? 'Yes' : 'No' %></p>
+    <p><strong>Dryer Available:</strong> <%= restroom.metrics.dryer ? 'Yes' : 'No' %></p>
 
-        <p><strong>Overall Rating:</strong> 
-            <div class="star-rating">
-                <% for (let i = 1; i <= 5; i++) { %>
-                    <% if (i <= restroom.rating) { %>
-                        <span class="star filled">★</span>
-                    <% } else { %>
-                        <span class="star">☆</span>
-                    <% } %>
+    <p><strong>Overall Rating:</strong> 
+        <div class="star-rating">
+            <% for (let i = 1; i <= 5; i++) { %>
+                <% if (i <= restroom.rating) { %>
+                    <span class="star filled">★</span>
+                <% } else { %>
+                    <span class="star">☆</span>
                 <% } %>
-            </div>
-        </p>
-        
-        <p><strong>Cleanliness:</strong> 
-            <div class="star-rating">
-                <% for (let i = 1; i <= 5; i++) { %>
-                    <% if (i <= restroom.ratingMetrics.cleanliness) { %>
-                        <span class="star filled">★</span>
-                    <% } else { %>
-                        <span class="star">☆</span>
-                    <% } %>
+            <% } %>
+        </div>
+    </p>
+    
+    <p><strong>Cleanliness:</strong> 
+        <div class="star-rating">
+            <% for (let i = 1; i <= 5; i++) { %>
+                <% if (i <= restroom.ratingMetrics.cleanliness) { %>
+                    <span class="star filled">★</span>
+                <% } else { %>
+                    <span class="star">☆</span>
                 <% } %>
-            </div>
-        </p>
+            <% } %>
+        </div>
+    </p>
 
-        <p><strong>Accessibility:</strong> 
-            <div class="star-rating">
-                <% for (let i = 1; i <= 5; i++) { %>
-                    <% if (i <= restroom.ratingMetrics.accessibility) { %>
-                        <span class="star filled">★</span>
-                    <% } else { %>
-                        <span class="star">☆</span>
-                    <% } %>
+    <p><strong>Accessibility:</strong> 
+        <div class="star-rating">
+            <% for (let i = 1; i <= 5; i++) { %>
+                <% if (i <= restroom.ratingMetrics.accessibility) { %>
+                    <span class="star filled">★</span>
+                <% } else { %>
+                    <span class="star">☆</span>
                 <% } %>
-            </div>
-        </p>
+            <% } %>
+        </div>
+    </p>
 
-        <p><strong>Facility:</strong> 
-            <div class="star-rating">
-                <% for (let i = 1; i <= 5; i++) { %>
-                    <% if (i <= restroom.ratingMetrics.facility) { %>
-                        <span class="star filled">★</span>
-                    <% } else { %>
-                        <span class="star">☆</span>
-                    <% } %>
+    <p><strong>Facility:</strong> 
+        <div class="star-rating">
+            <% for (let i = 1; i <= 5; i++) { %>
+                <% if (i <= restroom.ratingMetrics.facility) { %>
+                    <span class="star filled">★</span>
+                <% } else { %>
+                    <span class="star">☆</span>
                 <% } %>
+            <% } %>
+        </div>
+    </p>
+    <div class="reviews">
+        <h2>Reviews</h2>
+        <% reviews.forEach(review => { %>
+            <div class="review">
+                <p><strong>Rating:</strong> <%= review.rating %></p>
+                <p><%= review.text %></p>
+                
             </div>
-        </p>
-        <p><strong>Image:</strong>
-            <div class="star-rating">
-                <img src="<%= restroom.pathToImage %>" alt="Restroom Image">
-            </div>
-        </p>
+        <% }) %>
+    </div>
+    <div class="form-container">
+    <form action="/restroom/<%= restroomId %>/review" method="POST" required>
+        <label for="text">Review:</label>
+        <textarea name="text" id="text" rows="4" cols="50" required></textarea>
+        <br>
+        <label for="rating">Rating (1-5)*:</label>
+        <input type="range" name="rating" id="rating" min="1" max="5" required>
+        <br>
+        <h3>Rating Metrics</h3>
+        <label for="cleanliness">Cleanliness Rating (1-5)*:</label><br>
+        <input type="range" id="cleanliness" name="ratingMetrics[cleanliness]" min="1" max="5" required><br>
+
+        <label for="accessibility">Accessibility Rating (1-5)*:</label><br>
+        <input type="range" id="accessibility" name="ratingMetrics[accessibility]" min="1" max="5" required><br>
+
+        <label for="facility">Facility Rating (1-5)*:</label><br>
+        <input type="range" id="facility" name="ratingMetrics[facility]" min="1" max="5" required><br><br>
+        <br>
+        <h3>Metrics</h3>
+        <label for="isOpen">Is open</label>
+        <input type="checkbox" name="isOpen" id="isOpen">
+        <br>
+        <label for="hasBabyChangingTable">Has baby changing table</label>
+        <input type="checkbox" name="hasBabyChangingTable" id="hasBabyChangingTable">
+        <br>
+        <label for="providesSanitaryProducts">Provides sanitary products</label>
+        <input type="checkbox" name="providesSanitaryProducts" id="providesSanitaryProducts">
+        <br>
+        <label for="customerOnly">Customer only</label>
+        <input type="checkbox" name="customerOnly" id="customerOnly">
+        <br>
+        <label for="dryer">Dryer</label>
+        <input type="checkbox" name="dryer" id="dryer">
+        <br><br>
+        <button type="submit" class="register-button">Submit</button>
+        <input type="button" value="Back" onclick="window.location.href='/home'" class="register-button">
+    </form>
     </div>
 </body>
 </html>
