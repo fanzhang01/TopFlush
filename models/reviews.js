@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const Restroom = require('./restrooms');
 
 const reviewSchema = new mongoose.Schema({
-  reviewerId: mongoose.Schema.Types.ObjectId,
   restroomId: mongoose.Schema.Types.ObjectId,
   userId:mongoose.Schema.Types.ObjectId,
   text: String,
