@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Review = require("./reviews");
 
 const restroomSchema = new mongoose.Schema({
   location: {
@@ -92,7 +93,7 @@ restroomSchema.statics.addRestroom = async function (restroomData) {
 
 restroomSchema.statics.calculateRatingMetrics=async function (restroomId) {
   const pipeline = [
-    { $match: { restroomId: mongoose.Types.ObjectId(restroomId) } },
+    { $match: { restroomId: restroomId } },
     {
       $group: {
         _id: "$restroomId",
