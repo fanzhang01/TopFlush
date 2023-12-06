@@ -4,7 +4,7 @@ const app = require('../app');
 
 describe('POST /register', () => {
     it('should register a user', async () => {
-        const response = await request(app).post("/register").send('username=testuser&email=test@example.com&password=testpassword&gender=male');
+        const response = await request(app).post("/register").send('username=testuser&email=test@example.com&password=testpassword&confirmedpassword=testpassword&gender=male');
 
         expect(response.status).toBe(302); 
         expect(response.header.location).toBe('/home'); 

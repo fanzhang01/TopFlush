@@ -2,9 +2,16 @@ const mongoose = require("mongoose");
 const Restroom = require('./restrooms');
 
 const reviewSchema = new mongoose.Schema({
-  reviewerId: mongoose.Schema.Types.ObjectId,
-  restroomId: mongoose.Schema.Types.ObjectId,
-  userId:mongoose.Schema.Types.ObjectId,
+  restroomId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Restroom',
+    required: true
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
   text: String,
   rating: Number,
   ratingMetrics: {
@@ -22,8 +29,11 @@ const reviewSchema = new mongoose.Schema({
 });
 
 reviewSchema.statics.addReview = async function (reviewData) {
-  const { reviewerId, restroomId, ratingMetrics } = reviewData;
+  const newReview = new Review(reviewData);
+  await newReview.save();
+  //const { reviewerId, restroomId, ratingMetrics } = reviewData;
 
+  /*
   if (!reviewerId || !restroomId || !ratingMetrics) {
     throw new Error("Required fields are missing");
   }
@@ -33,16 +43,25 @@ reviewSchema.statics.addReview = async function (reviewData) {
   if (existingReview) {
     throw new Error("This user's review for this restroom already exists.");
   }
+  */
+  //const newReview = new this(reviewData);
 
-  const newReview = new this(reviewData);
-
-  await newReview.save();
-
+  //await newReview.save();
+  const Restroom = require('./restrooms');
+  await Restroom.findByIdAndUpdate(
+    reviewData.restroomId,
+    { $push: { reviews: newReview._id } }
+);
+  await Restroom.calculateAndUpdateRating(reviewData.restroomId);
+  /*
   const avgRatingMetrics = await Restroom.calculateRatingMetrics(
     reviewData.restroomId
   );
+  */
+  return newReview;
 
     //Update rating of restroom
+    /*
   if (avgRatingMetrics) {
     await Restroom.findByIdAndUpdate(
       reviewData.restroomId,
@@ -51,6 +70,7 @@ reviewSchema.statics.addReview = async function (reviewData) {
     );
   }
   return newReview;
+  */
 };
 
 reviewSchema.statics.getReviewByRestroom = async function (restroomId) {

@@ -1,68 +1,16 @@
 <h1>Create Restroom</h1>
-<form action="/createRestroom" method="POST" enctype="multipart/form-data>
+<form action="/createRestroom" method="POST" enctype="multipart/form-data">
     <!-- Location -->
     <label for="address">Address*:</label><br>
-    <input type="text" id="address" name="location[address]" required><br>
+    <input type="text" id="address" name="location[address]" required><br><br>
 
-    <label for="city">City*:</label><br>
-    <input type="text" id="city" name="location[city]" required><br>
-
-    <label for="state">State*:</label><br>
-    <select id="state" name="location[state]" required>
-        <option value="AL">AL</option>
-        <option value="AK">AK</option>
-        <option value="AZ">AZ</option>
-        <option value="AR">AR</option>
-        <option value="CA">CA</option>
-        <option value="CO">CO</option>
-        <option value="CT">CT</option>
-        <option value="DE">DE</option>
-        <option value="FL">FL</option>
-        <option value="GA">GA</option>
-        <option value="HI">HI</option>
-        <option value="ID">ID</option>
-        <option value="IL">IL</option>
-        <option value="IN">IN</option>
-        <option value="IA">IA</option>
-        <option value="KS">KS</option>
-        <option value="KY">KY</option>
-        <option value="LA">LA</option>
-        <option value="ME">ME</option>
-        <option value="MD">MD</option>
-        <option value="MA">MA</option>
-        <option value="MI">MI</option>
-        <option value="MN">MN</option>
-        <option value="MS">MS</option>
-        <option value="MO">MO</option>
-        <option value="MT">MT</option>
-        <option value="NE">NE</option>
-        <option value="NV">NV</option>
-        <option value="NH">NH</option>
-        <option value="NJ">NJ</option>
-        <option value="NM">NM</option>
-        <option value="NY">NY</option>
-        <option value="NC">NC</option>
-        <option value="ND">ND</option>
-        <option value="OH">OH</option>
-        <option value="OK">OK</option>
-        <option value="OR">OR</option>
-        <option value="PA">PA</option>
-        <option value="RI">RI</option>
-        <option value="SC">SC</option>
-        <option value="SD">SD</option>
-        <option value="TN">TN</option>
-        <option value="TX">TX</option>
-        <option value="UT">UT</option>
-        <option value="VT">VT</option>
-        <option value="VA">VA</option>
-        <option value="WA">WA</option>
-        <option value="WV">WV</option>
-        <option value="WI">WI</option>
-        <option value="WY">WY</option>
-    </select><br>
+    <input type="hidden" id="latitude" name="location[latitude]">
+    <input type="hidden" id="longitude" name="location[longitude]">
+    <input type="hidden" id="city" name="location[city]">
+    <input type="hidden" id="state" name="location[state]">
 
     <label for="capacity">Capacity:</label><br>
-    <input type="number" id="capacity" name="capacity"><br>
+    <input type="number" id="capacity" name="capacity"><br><br>
 
     <!-- Metrics -->
     <input type="hidden" name="metrics[hasBabyChangingTable]" value="false">
@@ -81,7 +29,7 @@
 
     <input type="checkbox" id="dryer" name="metrics[dryer]" value="true">
     <label for="dryer">Hand Dryer</label><br>
-
+    <br>
     <!-- Rating Metrics -->
     <label for="cleanliness">Cleanliness Rating (1-5)*:</label><br>
     <input type="range" id="cleanliness" name="ratingMetrics[cleanliness]" min="1" max="5" required><br>
@@ -90,17 +38,49 @@
     <input type="range" id="accessibility" name="ratingMetrics[accessibility]" min="1" max="5" required><br>
 
     <label for="facility">Facility Rating (1-5)*:</label><br>
-    <input type="range" id="facility" name="ratingMetrics[facility]" min="1" max="5" required><br>
+    <input type="range" id="facility" name="ratingMetrics[facility]" min="1" max="5" required><br><br>
 
-    <label for="text">Review</label><br>
+    <label for="text">Review:</label><br>
     <input type="text" id="text" name="text" size="50"><br><br>
 
-    <label for="reviewImage">Upload Images</label><br>
-    <input type="file" id="reviewImage" name="reviewImage" multiple>
+    <label for="reviewImage">Upload Images:</label><br>
+    <input type="file" id="reviewImage" name="reviewImage" >
 
     <p>* are required</p><br>
     <!-- submit and backbutton on one row with same size -->
-    <input type="submit" value="Submit">
-    <input type="button" value="Back" onclick="window.location.href='/home'">
+    <input type="submit" value="Submit" class="register-button">
+    <input type="button" value="Back" onclick="window.location.href='/home'" class="register-button">
     
 </form>
+
+<!-- Google Places API Integration -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHqfPgHzkC2REof5lJQKFoPaAadhDdP84&libraries=places"></script>
+<script>
+    let autocomplete;
+    function initAutocomplete() {
+        autocomplete = new google.maps.places.Autocomplete(
+            document.getElementById('address'), {types: ['geocode']}
+        );
+        autocomplete.addListener('place_changed', fillInAddress);
+    }
+
+    function fillInAddress() {
+        const place = autocomplete.getPlace();
+        document.getElementById('latitude').value = place.geometry.location.lat();
+        document.getElementById('longitude').value = place.geometry.location.lng();
+
+        for (const component of place.address_components) {
+            const componentType = component.types[0];
+            switch (componentType) {
+                case "locality":
+                    document.getElementById('city').value = component.long_name;
+                    break;
+                case "administrative_area_level_1":
+                    document.getElementById('state').value = component.short_name;
+                    break;
+            }
+        }
+    }
+
+    window.addEventListener('load', initAutocomplete);
+</script>

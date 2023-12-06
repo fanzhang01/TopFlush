@@ -61,7 +61,7 @@ const storageConfig = multer.diskStorage({
     
     let userId = req.session.userId;
     let tempFilePath = "public/storage/" + userId;
-    req.body.tempFilePath = tempFilePath;
+    req.body.tempFilePath = "/" + tempFilePath + "/" + file.originalname;
     fs.mkdirSync(tempFilePath, { recursive: true });
     cb(null, tempFilePath);
   },
@@ -230,7 +230,10 @@ app.get("/restroom/:id", async (req, res) => {
     const restroom = await Restroom.findById(restroomId);
     if (restroom) {
       console.log(restroom);
-      res.render("restroom", { restroom });
+      const reviews = await Review.find({
+        '_id': { $in: restroom.reviews }
+    }).select('text'); 
+      res.render("restroom", { restroomId:restroomId,restroom:restroom,username: req.session.username,reviews:reviews });
     } else {
       // If no restroom is found, send a 404 response with the message "Restroom not found" and its id
       res.status(404).send(`Restroom not found with id ${restroomId}`);
@@ -239,18 +242,38 @@ app.get("/restroom/:id", async (req, res) => {
     res.status(500).send(err.message);
   }
 });
-/*
+
 app.post("/restroom/:id/review",async(req,res)=>{
   if (!req.session.userId) {
     return res.redirect('/login');
   }
+  
   try{
-    let userId = req.session.userId;
+    const userId = req.session.userId;
+    const restroomId = req.params.id;
+    const { text, rating, cleanliness, accessibility, facility, isOpen, hasBabyChangingTable, providesSanitaryProducts, customerOnly, dryer } = req.body;
+    const ratingMetrics = { cleanliness, accessibility, facility };
+    const metrics = {
+      isOpen: isOpen === 'on',
+      hasBabyChangingTable: hasBabyChangingTable === 'on',
+      providesSanitaryProducts: providesSanitaryProducts === 'on',
+      customerOnly: customerOnly === 'on',
+      dryer: dryer === 'on'
+    };
+    await Review.addReview({
+      restroomId: restroomId,
+      userId: userId,
+      text: text,
+      rating: rating,
+      ratingMetrics: ratingMetrics,
+      metrics: metrics
+    });
+
+    res.redirect(`/restroom/${restroomId}`);
   }catch (err) {
     res.status(500).send(err.message);
   }
 })
-*/
 
 app.get("/createRestroom", (req, res) => {
   if (!req.session.userId) {
@@ -260,7 +283,6 @@ app.get("/createRestroom", (req, res) => {
 });
 
 app.post("/createRestroom", upload.single("reviewImage"), async (req, res) => {
-
   console.log("req.file: ", req.file);
 
   if (!req.session.userId) {
@@ -269,85 +291,55 @@ app.post("/createRestroom", upload.single("reviewImage"), async (req, res) => {
   
   try {
     console.log("getting into router");
-    const {
-      address,
-      city,
-      state,
-      capacity,
-      hasBabyChangingTable,
-      providesSanitaryProducts,
-      customerOnly,
-      dryer,
-      cleanliness,
-      accessibility,
-      facility,
-      text,
-      tempFilePath
-    } = req.body;
 
+    // Extracting data from the request
+    const { location, capacity, metrics, ratingMetrics, text } = req.body;
     const userId = req?.session?.userId;
 
-    const metrics = req.body.metrics;
-
+    // Process checkbox values
     for (const key in metrics) {
-      if (Array.isArray(metrics[key])) {
-        metrics[key] = metrics[key].includes("true");
-      } else {
-        metrics[key] = metrics[key] === "true";
-      }
+      metrics[key] = metrics[key] === "true";
     }
 
-    console.log("req.body: ", req.body);
-    const rating =
-      (parseFloat(req.body.ratingMetrics.cleanliness) +
-        parseFloat(req.body.ratingMetrics.accessibility) +
-        parseFloat(req.body.ratingMetrics.facility)) /
-      3;
+    // Calculate overall rating
+    const rating = (parseFloat(ratingMetrics.cleanliness) +
+                    parseFloat(ratingMetrics.accessibility) +
+                    parseFloat(ratingMetrics.facility)) / 3;
     console.log('rating is:', rating);
-    console.log(req.body.ratingMetrics.cleanliness);
+
+    // Prepare restroom data for creation
     const restroomData = {
       location: {
-        address: req.body.location.address,
-        city: req.body.location.city,
-        state: req.body.location.state,
+        address: location.address,
+        latitude: parseFloat(location?.latitude || 0.0),
+        longitude: parseFloat(location?.longitude || 0.0),
+        city: location.city,
+        state: location.state,
       },
-      capacity: req.body.capacity,
+      capacity: parseInt(capacity, 10 || 0.0),
       rating,
       ratingMetrics: {
-        cleanliness: req.body.ratingMetrics.cleanliness,
-        accessibility: req.body.ratingMetrics.accessibility,
-        facility: req.body.ratingMetrics.facility,
+        cleanliness: parseFloat(ratingMetrics.cleanliness),
+        accessibility: parseFloat(ratingMetrics.accessibility),
+        facility: parseFloat(ratingMetrics.facility),
       },
-      metrics: {
-        hasBabyChangingTable: req.body.metrics.hasBabyChangingTable,
-        providesSanitaryProducts: req.body.metrics.providesSanitaryProducts,
-        customerOnly: req.body.metrics.customerOnly,
-        dryer: req.body.metrics.dryer,
-      },
-      pathToImage: req.body.tempFilePath
+      metrics,
+      pathToImage: req.body.tempFilePath //? req.file.path : null // Assuming 'req.file.path' contains the path to the uploaded image
     };
 
     console.log("restroomData:", restroomData);
     await Restroom.create(restroomData);
 
     console.log("restroom created");
-    const restroomId = await Restroom.findOne({ "location.address": address });
+    const createdRestroom = await Restroom.findOne({ "location.address": location.address });
 
+    // Prepare review data for creation
     const reviewData = {
-      restroomId,
+      restroomId: createdRestroom._id,
       reviewerId: userId,
       text,
-      metrics: {
-        hasBabyChangingTable,
-        providesSanitaryProducts,
-        customerOnly,
-        dryer,
-      },
-      ratingMetrics: {
-        cleanliness,
-        accessibility,
-        facility,
-      },
+      metrics,
+      ratingMetrics,
     };
 
     await Review.create(reviewData);
@@ -369,6 +361,7 @@ app.post("/createRestroom", upload.single("reviewImage"), async (req, res) => {
   }
 });
 
+
 app.get("/restrooms", async (req, res) => {
   try {
     const restrooms = await Restroom.find();
@@ -385,7 +378,7 @@ app.get("/profile", async (req, res) => {
   try {
     const user = await User.findById(req.session.userId);
     if (user) {
-      res.render("profile", { user: user });
+      res.render("profile", { user: user,username: req.session.username });
     } else {
       res.redirect('/login');
     }

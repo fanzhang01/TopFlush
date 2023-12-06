@@ -1,14 +1,13 @@
 const mongoose = require("mongoose");
+const Review = require("./reviews");
 
 const restroomSchema = new mongoose.Schema({
   location: {
-    type: {
-      address: String,
-      city: String,
-      state: String,
-    },
-    unique: true,
-    dropDups: true,
+    address: { type: String, required: true },
+    latitude: { type: Number, required: true },
+    longitude: { type: Number, required: true },
+    city: { type: String, required: true },
+    state: { type: String, required: true }
   },
   capacity: {
     type: Number,
@@ -16,6 +15,7 @@ const restroomSchema = new mongoose.Schema({
   },
   reviews: {
     type: [{ type: mongoose.Schema.Types.ObjectId }],
+    ref:'Review',
     default: [],
   },
   rating: {
@@ -92,12 +92,14 @@ restroomSchema.statics.addRestroom = async function (restroomData) {
   return newRestroom;
 };
 
-async function calculateRatingMetrics(restroomId) {
+restroomSchema.statics.calculateAndUpdateRating=async function (restroomId) {
+  const Review = require('./reviews');
   const pipeline = [
-    { $match: { restroomId: mongoose.Types.ObjectId(restroomId) } },
+    { $match: { restroomId: restroomId } },
     {
       $group: {
         _id: "$restroomId",
+        avgRating: { $avg: "$rating" },
         avgCleanliness: { $avg: "$ratingMetrics.cleanliness" },
         avgAccessibility: { $avg: "$ratingMetrics.accessibility" },
         avgFacility: { $avg: "$ratingMetrics.facility" },
@@ -105,14 +107,18 @@ async function calculateRatingMetrics(restroomId) {
     },
   ];
 
-  const results = await Review.aggregate(pipeline);
+  const aggregationResults = await Review.aggregate(pipeline);
 
-  if (results.length > 0) {
-    return {
-      cleanliness: results[0].avgCleanliness,
-      accessibility: results[0].avgAccessibility,
-      facility: results[0].avgFacility,
-    };
+  if (aggregationResults.length > 0) {
+    const [metrics] = aggregationResults;
+    await this.findByIdAndUpdate(restroomId, {
+        averageRating: metrics.avgRating,
+        ratingMetrics: {
+            cleanliness: metrics.avgCleanliness,
+            accessibility: metrics.avgAccessibility,
+            facility: metrics.avgFacility
+        }
+    });
   } else {
     return null;
   }
