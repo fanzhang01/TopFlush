@@ -48,7 +48,7 @@
     <script>
         let map;
         let restrooms = <%- JSON.stringify(restrooms) %>; 
-
+        console.log(restrooms)
         function initMap() {
             map = new google.maps.Map(document.getElementById('map'), {
                 center: { lat: 40.7448, lng: -74.0256 }, // Default center (e.g., New York City)
@@ -58,8 +58,8 @@
             restrooms.forEach(function(restroom) {
                 let marker = new google.maps.Marker({
                     position: { 
-                        lat: restroom.location.coordinates.latitude, 
-                        lng: restroom.location.coordinates.longitude 
+                        lat: restroom.location.latitude, 
+                        lng: restroom.location.longitude 
                     },
                     map: map,
                     title: restroom.location.address

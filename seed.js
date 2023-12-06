@@ -7,11 +7,11 @@ async function seedDB() {
   const initRestroom = [
     {
       location: {
-        address: "229 Washington St",
+        address: "229 Washington St Public Restroom",
         city: "Hoboken",
         state: "NJ",
-        latitude: 0,
-        longitude: 0
+        latitude: 40.739620,
+        longitude: -74.030000
       },
       capacity: 3,
       rating: 4,
@@ -31,11 +31,11 @@ async function seedDB() {
     },
     {
       location: {
-        address: "UCC University Towers",
+        address: "UCC University Towers Public Restroom",
         city: "Hoboken",
         state: "NJ",
-        latitude: 0,
-        longitude: 0,
+        latitude: 40.7441753,
+        longitude: -74.0245282,
       },
       capacity: 6,
       rating: 5,
@@ -55,11 +55,11 @@ async function seedDB() {
     },
     {
       location: {
-        address: "4901 Bergenline Ave",
+        address: "4901 Bergenline Ave Public Restroom",
         city: "West New York",
         state: "NJ",
-        latitude: 0,
-        longitude: 0
+        latitude: 40.753500,
+        longitude: -74.041500
       },
       capacity: 3,
       rating: 3,
@@ -80,7 +80,6 @@ async function seedDB() {
   ];
 
   for (const restroom of initRestroom) {
-    //console.log(restroom)
     await Restroom.addRestroom(restroom);
   }
 }
