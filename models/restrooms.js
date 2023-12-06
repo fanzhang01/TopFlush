@@ -90,7 +90,7 @@ restroomSchema.statics.addRestroom = async function (restroomData) {
   return newRestroom;
 };
 
-async function calculateRatingMetrics(restroomId) {
+restroomSchema.statics.calculateRatingMetrics=async function (restroomId) {
   const pipeline = [
     { $match: { restroomId: mongoose.Types.ObjectId(restroomId) } },
     {

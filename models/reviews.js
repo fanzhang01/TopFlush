@@ -4,12 +4,12 @@ const Restroom = require('./restrooms');
 const reviewSchema = new mongoose.Schema({
   restroomId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'restrooms',
+    ref: 'Restroom',
     required: true
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'users',
+    ref: 'User',
     required: true
   },
   text: String,
