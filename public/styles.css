@@ -244,3 +244,11 @@ footer {
   right: 0;
   width: 33%;
 }
+
+.restroom-details {
+  margin: auto;
+  width: 50%; /* Adjust the width as necessary */
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
