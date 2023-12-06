@@ -250,7 +250,7 @@ app.post("/restroom/:id/review",async(req,res)=>{
     const restroomId = req.params.id;
     const { text, rating, ratingMetrics, metrics } = req.body;
 
-    await Review.createReview({
+    await Review.addReview({
       reviewerId: userId,
       restroomId: restroomId,
       userId: userId,
