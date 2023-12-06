@@ -15,6 +15,7 @@ const restroomSchema = new mongoose.Schema({
   },
   reviews: {
     type: [{ type: mongoose.Schema.Types.ObjectId }],
+    ref:'Review',
     default: [],
   },
   rating: {
@@ -91,12 +92,14 @@ restroomSchema.statics.addRestroom = async function (restroomData) {
   return newRestroom;
 };
 
-restroomSchema.statics.calculateRatingMetrics=async function (restroomId) {
+restroomSchema.statics.calculateAndUpdateRating=async function (restroomId) {
+  const Review = require('./reviews');
   const pipeline = [
     { $match: { restroomId: restroomId } },
     {
       $group: {
         _id: "$restroomId",
+        avgRating: { $avg: "$rating" },
         avgCleanliness: { $avg: "$ratingMetrics.cleanliness" },
         avgAccessibility: { $avg: "$ratingMetrics.accessibility" },
         avgFacility: { $avg: "$ratingMetrics.facility" },
@@ -104,14 +107,18 @@ restroomSchema.statics.calculateRatingMetrics=async function (restroomId) {
     },
   ];
 
-  const results = await Review.aggregate(pipeline);
+  const aggregationResults = await Review.aggregate(pipeline);
 
-  if (results.length > 0) {
-    return {
-      cleanliness: results[0].avgCleanliness,
-      accessibility: results[0].avgAccessibility,
-      facility: results[0].avgFacility,
-    };
+  if (aggregationResults.length > 0) {
+    const [metrics] = aggregationResults;
+    await this.findByIdAndUpdate(restroomId, {
+        averageRating: metrics.avgRating,
+        ratingMetrics: {
+            cleanliness: metrics.avgCleanliness,
+            accessibility: metrics.avgAccessibility,
+            facility: metrics.avgFacility
+        }
+    });
   } else {
     return null;
   }

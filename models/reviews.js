@@ -47,12 +47,21 @@ reviewSchema.statics.addReview = async function (reviewData) {
   //const newReview = new this(reviewData);
 
   //await newReview.save();
-
+  const Restroom = require('./restrooms');
+  await Restroom.findByIdAndUpdate(
+    reviewData.restroomId,
+    { $push: { reviews: newReview._id } }
+);
+  await Restroom.calculateAndUpdateRating(reviewData.restroomId);
+  /*
   const avgRatingMetrics = await Restroom.calculateRatingMetrics(
     reviewData.restroomId
   );
+  */
+  return newReview;
 
     //Update rating of restroom
+    /*
   if (avgRatingMetrics) {
     await Restroom.findByIdAndUpdate(
       reviewData.restroomId,
@@ -61,6 +70,7 @@ reviewSchema.statics.addReview = async function (reviewData) {
     );
   }
   return newReview;
+  */
 };
 
 reviewSchema.statics.getReviewByRestroom = async function (restroomId) {
