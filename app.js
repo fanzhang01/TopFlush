@@ -250,7 +250,13 @@ app.post("/restroom/:id/review",async(req,res)=>{
     const restroomId = req.params.id;
     const { text, rating, cleanliness, accessibility, facility, isOpen, hasBabyChangingTable, providesSanitaryProducts, customerOnly, dryer } = req.body;
     const ratingMetrics = { cleanliness, accessibility, facility };
-    const metrics = { isOpen, hasBabyChangingTable, providesSanitaryProducts, customerOnly, dryer };
+    const metrics = {
+      isOpen: isOpen === 'on',
+      hasBabyChangingTable: hasBabyChangingTable === 'on',
+      providesSanitaryProducts: providesSanitaryProducts === 'on',
+      customerOnly: customerOnly === 'on',
+      dryer: dryer === 'on'
+    };
     await Review.addReview({
       restroomId: restroomId,
       userId: userId,
